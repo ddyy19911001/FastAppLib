@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    api 'com.github.ddyy19911001:DySuperBase:1.1'
+    api 'com.github.ddyy19911001:RequestUtils:1.1.0'
+    api 'com.github.ddyy19911001:smartRefreshWithAdapter:1.0.0'
+    api 'com.github.ddyy19911001:DyNormalUtils:1.0.4'
+    //加载状态布局
+    api 'com.github.Bakumon:StatusLayoutManager:1.0.4'
+    //圆角imageview
+    api 'org.raphets:roundimageview:1.2.0'
+    api 'com.github.bumptech.glide:glide:3.7.0'
+    //左右滑动的布局
+    api 'com.github.ddyy19911001:DyTabLayout:1.0.3'
+}

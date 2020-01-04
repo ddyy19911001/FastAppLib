@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--注意定义customer的tv的宽度-->
+    <!--这里设置stl_distributeEvenly为true可以让滑动到后面时整个列表左右滚动-->
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/hm_tab_layout"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:stl_indicatorAlwaysInCenter="false"
+        app:stl_indicatorWithoutPadding="false"
+        app:stl_indicatorInFront="false"
+        app:stl_indicatorInterpolation="smart"
+        app:stl_indicatorGravity="bottom"
+        app:stl_indicatorColor="@color/select_color"
+        app:stl_indicatorThickness="3dp"
+        app:stl_indicatorWidth="32dp"
+        app:stl_indicatorCornerRadius="1dp"
+        app:stl_overlineColor="@color/select_color"
+        app:stl_overlineThickness="0dp"
+        app:stl_underlineColor="@color/select_color"
+        app:stl_underlineThickness="0dp"
+        app:stl_dividerColor="@color/select_color"
+        app:stl_dividerThickness="0dp"
+        app:stl_defaultTabBackground="?attr/selectableItemBackground"
+        app:stl_defaultTabTextAllCaps="true"
+        app:stl_defaultTabTextColor="@color/normal_gray"
+        app:stl_defaultTabTextSize="14sp"
+        app:stl_defaultTabTextHorizontalPadding="8dp"
+        app:stl_defaultTabTextMinWidth="60dp"
+        app:stl_distributeEvenly="true"
+        app:stl_clickable="true"
+        app:stl_titleOffset="auto_center"
+        app:stl_drawDecorationAfterTab="true"
+        />
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_weight="1"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
+</LinearLayout>
