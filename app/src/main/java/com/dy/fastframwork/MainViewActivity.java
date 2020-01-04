@@ -3,10 +3,19 @@ package com.dy.fastframwork;
 
 
 
+import android.os.Bundle;
+
 import androidx.viewpager.widget.ViewPager;
 
 import com.dy.fastframework.activity.BaseTabViewActivity;
+import com.dy.fastframework.picture.PictureSelectUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ypx.imagepicker.bean.ImageItem;
+import com.ypx.imagepicker.data.OnPickerCompleteListener;
+
+import java.util.ArrayList;
+
+import yin.deng.normalutils.utils.LogUtils;
 
 
 public class MainViewActivity extends BaseTabViewActivity {
@@ -39,8 +48,18 @@ public class MainViewActivity extends BaseTabViewActivity {
     }
 
     @Override
-    public void initFirst() {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LogUtils.w("选择---onCreate");
     }
+
+    @Override
+    public void initFirst() {
+        LogUtils.w("执行选择");
+
+    }
+
+
 
 
 }

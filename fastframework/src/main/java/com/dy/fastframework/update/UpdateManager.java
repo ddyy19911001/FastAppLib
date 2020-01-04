@@ -81,6 +81,18 @@ public class UpdateManager {
         });
     }
 
+    /**
+     * 请求权限并开始下载
+     * @param updateInfo
+     * @param activity
+     * @param PermissionListener
+     */
+    private void requestPermissionAndDownLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity,PermissionListener permissionListener) {
+        dirPath = Utils.getRootDirPath(activity)+ File.separator;
+        String[]permissions={Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        activity.requestRunTimePermission(permissions,permissionListener);
+    }
+
 
     /**
      * 此处开始真正的下载操作

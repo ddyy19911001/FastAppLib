@@ -1,7 +1,6 @@
 package com.dy.fastframework.picture;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,13 +8,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import yin.deng.superbase.activity.ScreenUtils;
 
-public class MySimpleTargetImage extends SimpleTarget<GlideDrawable> {
+public class MySimpleTargetImage extends SimpleTarget<Drawable> {
     public Context context;
     public ImageView imageView;
 
@@ -32,7 +30,7 @@ public class MySimpleTargetImage extends SimpleTarget<GlideDrawable> {
 
 
     @Override
-    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
         int imageWidth = resource.getIntrinsicWidth();
         int imageHeight = resource.getIntrinsicHeight();
         int width = ScreenUtils.getScreenWidth(context);//固定宽度
