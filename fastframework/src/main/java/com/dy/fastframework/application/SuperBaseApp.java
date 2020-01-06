@@ -18,8 +18,6 @@ public class SuperBaseApp extends Application {
             initDebugMode();
         }
         CrashHandler.getInstance().init(this);
-        //分包
-        MultiDex.install(this);
     }
 
 
