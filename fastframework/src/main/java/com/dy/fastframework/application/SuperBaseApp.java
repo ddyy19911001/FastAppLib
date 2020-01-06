@@ -2,7 +2,6 @@ package com.dy.fastframework.application;
 
 import android.app.Application;
 
-import androidx.multidex.MultiDex;
 
 import com.dy.fastframework.BuildConfig;
 import com.dy.fastframework.erro.CrashHandler;
