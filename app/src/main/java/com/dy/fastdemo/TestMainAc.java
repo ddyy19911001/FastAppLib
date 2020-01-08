@@ -1,4 +1,4 @@
-package com.dy.fastframwork;
+package com.dy.fastdemo;
 
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestMainAc extends BaseMainActivity {
-    private NoScrollViewPager vp;
+    private ViewPager vp;
     private LinearLayout llNavigation;
     @Override
     public int setLayout() {
@@ -22,7 +22,7 @@ public class TestMainAc extends BaseMainActivity {
 
     @Override
     public void bindViewWithId() {
-        vp = (NoScrollViewPager) findViewById(R.id.vp);
+        vp = (ViewPager) findViewById(R.id.vp);
         llNavigation = (LinearLayout) findViewById(R.id.ll_navigation);
 
     }
@@ -81,7 +81,7 @@ public class TestMainAc extends BaseMainActivity {
 
     @Override
     public NoScrollViewPager getNoScrollViewPager() {
-        return vp;
+        return null;
     }
 
 

@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/normal_bg"
     android:layout_height="match_parent">
-    <com.dy.fastframework.view.NoScrollViewPager
+    <androidx.viewpager.widget.ViewPager
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

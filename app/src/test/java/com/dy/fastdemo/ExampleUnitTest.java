@@ -1,4 +1,4 @@
-package com.dy.fastframwork;
+package com.dy.fastdemo;
 
 import org.junit.Test;
 

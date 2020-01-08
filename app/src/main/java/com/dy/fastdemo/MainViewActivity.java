@@ -1,4 +1,4 @@
-package com.dy.fastframwork;
+package com.dy.fastdemo;
 
 
 
@@ -8,12 +8,7 @@ import android.os.Bundle;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dy.fastframework.activity.BaseTabViewActivity;
-import com.dy.fastframework.picture.PictureSelectUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ypx.imagepicker.bean.ImageItem;
-import com.ypx.imagepicker.data.OnPickerCompleteListener;
-
-import java.util.ArrayList;
 
 import yin.deng.normalutils.utils.LogUtils;
 
