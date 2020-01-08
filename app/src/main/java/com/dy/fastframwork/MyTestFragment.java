@@ -25,11 +25,10 @@ public class MyTestFragment extends BaseRecycleViewFragment<String> {
 
     @Override
     protected void init() {
-        final MainViewActivity activity= (MainViewActivity) getActivity();
         tvTest.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
-                PictureSelectUtil.chooseSigleHeadImgCrop(activity,3, new OnPickerCompleteListener<ArrayList<ImageItem>>() {
+                PictureSelectUtil.chooseSigleHeadImgCrop(getActivity(),3, new OnPickerCompleteListener<ArrayList<ImageItem>>() {
                     @Override
                     public ArrayList<ImageItem> onTransit(ArrayList<ImageItem> items) {
                         return items;

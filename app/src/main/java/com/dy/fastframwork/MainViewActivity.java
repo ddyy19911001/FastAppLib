@@ -56,7 +56,6 @@ public class MainViewActivity extends BaseTabViewActivity {
     @Override
     public void initFirst() {
         LogUtils.w("执行选择");
-
     }
 
 
