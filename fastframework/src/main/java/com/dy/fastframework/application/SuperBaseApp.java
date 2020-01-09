@@ -19,6 +19,9 @@ public class SuperBaseApp extends Application {
         if(isEnableDebugLog()) {
             initDebugMode();
         }
+        if(BuildConfig.DEBUG){
+            EventReceiver.getInstance().register();
+        }
         CrashHandler.getInstance().init(this);
         util=new SharedPreferenceUtil(this, getApplicationInfo().packageName);
     }
