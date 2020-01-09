@@ -3,6 +3,10 @@ package com.dy.fastdemo;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.dy.fastframework.application.SuperBaseApp;
+
+import java.util.ArrayList;
+
 import yin.deng.normalutils.utils.DataHolder;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.superbase.activity.LogUtils;
@@ -19,18 +23,18 @@ public class TestPullAc extends SuperBaseActivity {
 
     @Override
     public void bindViewWithId() {
+        ArrayList<String> likes = new ArrayList<String>();
+        likes.add("足球");
+        likes.add("蓝球");
+        likes.add("电脑");
+        final UserInfo info=new UserInfo("我我",30,"男",likes);
         img=findViewById(R.id.iv_zoom);
         button=findViewById(R.id.bt);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Object object= DataHolder.getInstance().getData("1");
-                if(object==null){
-                    LogUtils.i("数据为：" + "空的");
-                }else {
-                    LogUtils.i("数据为：" + object.toString());
-                }
-                DataHolder.getInstance().saveData("1", "我是之前存入的数据");
+                 LogUtils.i("用户信息："+ SuperBaseApp.getSharedPreferenceUtil().getObj("user", UserInfo.class));
+                 SuperBaseApp.getSharedPreferenceUtil().saveObject("user", info);
             }
         });
     }

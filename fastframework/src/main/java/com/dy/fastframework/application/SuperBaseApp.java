@@ -12,8 +12,7 @@ import yin.deng.normalutils.utils.SharedPreferenceUtil;
 
 
 public class SuperBaseApp extends Application {
-    private SharedPreferenceUtil util;
-
+    private static SharedPreferenceUtil util;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,7 +24,7 @@ public class SuperBaseApp extends Application {
     }
 
 
-    public SharedPreferenceUtil getSharedPreferenceUtil(){
+    public static SharedPreferenceUtil getSharedPreferenceUtil(){
         return util;
     }
 
