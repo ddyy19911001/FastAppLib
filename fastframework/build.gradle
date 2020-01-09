@@ -29,10 +29,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api 'com.github.ddyy19911001:DySuperBase:1.1.1'
+    api 'com.github.ddyy19911001:DySuperBase:1.1.2'
     api 'com.github.ddyy19911001:RequestUtils:1.1.0'
     api 'com.github.ddyy19911001:smartRefreshWithAdapter:1.0.0'
-    api 'com.github.ddyy19911001:DyNormalUtils:1.0.4'
+    api 'com.github.ddyy19911001:DyNormalUtils:1.0.6'
     //加载状态布局
     api 'com.github.Bakumon:StatusLayoutManager:1.0.4'
     //圆角imageview

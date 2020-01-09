@@ -59,7 +59,7 @@ public class UpdateManager {
      * @param activity
      * @param progressLogo
      */
-    private void requestPermissionAndDownLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity, final int progressLogo) {
+    public void requestPermissionAndDownLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity, final int progressLogo) {
         dirPath = Utils.getRootDirPath(activity)+ File.separator;
         String[]permissions={Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         activity.requestRunTimePermission(permissions, new PermissionListener() {
@@ -87,9 +87,9 @@ public class UpdateManager {
      * @param activity
      * @param PermissionListener
      */
-    private void requestPermissionAndDownLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity,PermissionListener permissionListener) {
+    public void requestPermissionAndDownLoadStart(final SuperBaseActivity activity,PermissionListener permissionListener) {
         dirPath = Utils.getRootDirPath(activity)+ File.separator;
-        String[]permissions={Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[]permissions={Manifest.permission.WRITE_EXTERNAL_STORAGE};
         activity.requestRunTimePermission(permissions,permissionListener);
     }
 
@@ -99,7 +99,7 @@ public class UpdateManager {
      * @param updateInfo
      * @param activity
      */
-    private void downLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity, final int appLogo) {
+    public void downLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity, final int appLogo) {
         String saveName=activity.getResources().getString(R.string.app_name)+"_"+updateInfo.getName()+".apk";
         apkPath=dirPath+saveName;
         PRDownloader.download(updateInfo.getUrl(),dirPath,
@@ -132,7 +132,7 @@ public class UpdateManager {
         });
     }
 
-    private void showProgressDialog(SuperBaseActivity activity, UpdateInfo updateInfo,int appLogo) {
+    public void showProgressDialog(SuperBaseActivity activity, UpdateInfo updateInfo,int appLogo) {
         if(progressDialog==null) {
             progressDialog = new ProgressDialog(activity);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

@@ -4,14 +4,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.dy.fastframework.fragment.BaseRecycleViewFragment;
-import com.dy.fastframework.picture.ImageLoadUtil;
-import com.dy.fastframework.view.ZoomScrollView;
 import com.okhttplib.HttpInfo;
 
 import java.util.List;
 
+import yin.deng.normalutils.utils.ImageLoadUtil;
+
 public class MyTestFragment extends BaseRecycleViewFragment<String> {
-    private ZoomScrollView mScrollView;
     private ImageView img;
 
     @Override
@@ -28,7 +27,6 @@ public class MyTestFragment extends BaseRecycleViewFragment<String> {
 
     @Override
     public void bindViewWithId(View view) {
-        mScrollView=view.findViewById(R.id.sc_zoom);
         img=view.findViewById(R.id.iv_zoom);
     }
 

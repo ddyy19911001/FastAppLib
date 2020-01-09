@@ -5,11 +5,15 @@ import android.app.Application;
 
 import com.dy.fastframework.BuildConfig;
 import com.dy.fastframework.erro.CrashHandler;
+import com.google.gson.Gson;
 
 import yin.deng.dyrequestutils.http.LogUtils;
+import yin.deng.normalutils.utils.SharedPreferenceUtil;
 
 
 public class SuperBaseApp extends Application {
+    private SharedPreferenceUtil util;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -17,6 +21,12 @@ public class SuperBaseApp extends Application {
             initDebugMode();
         }
         CrashHandler.getInstance().init(this);
+        util=new SharedPreferenceUtil(this, getApplicationInfo().packageName);
+    }
+
+
+    public SharedPreferenceUtil getSharedPreferenceUtil(){
+        return util;
     }
 
 

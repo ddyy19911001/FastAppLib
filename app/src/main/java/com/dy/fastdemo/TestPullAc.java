@@ -1,15 +1,17 @@
 package com.dy.fastdemo;
 
+import android.view.View;
 import android.widget.ImageView;
 
-import com.dy.fastframework.picture.ImageLoadUtil;
-import com.dy.fastframework.view.ZoomScrollView;
-
+import yin.deng.normalutils.utils.DataHolder;
+import yin.deng.normalutils.utils.ImageLoadUtil;
+import yin.deng.superbase.activity.LogUtils;
 import yin.deng.superbase.activity.SuperBaseActivity;
 
 public class TestPullAc extends SuperBaseActivity {
-    private ZoomScrollView mScrollView;
     private ImageView img;
+    private View button;
+
     @Override
     public int setLayout() {
         return R.layout.activity_main;
@@ -17,8 +19,20 @@ public class TestPullAc extends SuperBaseActivity {
 
     @Override
     public void bindViewWithId() {
-        mScrollView=findViewById(R.id.sc_zoom);
         img=findViewById(R.id.iv_zoom);
+        button=findViewById(R.id.bt);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Object object= DataHolder.getInstance().getData("1");
+                if(object==null){
+                    LogUtils.i("数据为：" + "空的");
+                }else {
+                    LogUtils.i("数据为：" + object.toString());
+                }
+                DataHolder.getInstance().saveData("1", "我是之前存入的数据");
+            }
+        });
     }
 
     @Override

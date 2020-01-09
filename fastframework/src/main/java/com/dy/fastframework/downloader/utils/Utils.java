@@ -17,6 +17,7 @@
 package com.dy.fastframework.downloader.utils;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.dy.fastframework.downloader.Constants;
 import com.dy.fastframework.downloader.core.Core;
@@ -164,7 +165,7 @@ public final class Utils {
     }
 
     public static String getRootDirPath(Context context){
-        return context.getFilesDir().getAbsolutePath();
+        return context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
     }
 
     private static boolean isRedirection(int code) {

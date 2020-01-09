@@ -39,6 +39,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.superbase.activity.LogUtils;
 import yin.deng.superbase.activity.SuperBaseActivity;
 
