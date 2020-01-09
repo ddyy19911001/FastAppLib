@@ -1,6 +1,7 @@
 package com.dy.fastdemo;
 
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,9 @@ import com.dy.fastframework.view.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import yin.deng.normalutils.utils.EventHolder;
+import yin.deng.normalutils.utils.LogUtils;
 
 public class TestMainAc extends BaseMainActivity {
     private ViewPager vp;
@@ -111,5 +115,13 @@ public class TestMainAc extends BaseMainActivity {
     @Override
     public void initFirst() {
         initBottomTab();
+        vp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.w("发送消息了");
+                EventHolder.getInstance().post(1, "我是要发送的内容");
+            }
+        });
+        EventHolder.getInstance().post(1, "我是要发送的内容");
     }
 }
