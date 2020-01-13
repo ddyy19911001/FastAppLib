@@ -23,33 +23,15 @@ import yin.deng.dyrequestutils.http.MyHttpUtils;
 public class BasePresenter {
     public static BasePresenter basePresenter;
     public MyHttpUtils httpUtils;
-    public String baseUrl;
     public MyHttpUtils.OnGetInfoListener listener;
     private List<HeaderParam> headers=new ArrayList<>();
 
-    public BasePresenter() {
+
+    public BasePresenter(Application app,IBaseView iBaseView) {
+        this.listener=iBaseView;
+        httpUtils = new MyHttpUtils(app);
     }
 
-    /**
-     * 在App初始化时调用
-     * @param baseUrl
-     * @param application
-     * @return
-     */
-    public BasePresenter init(String baseUrl, Application application){
-        if(httpUtils==null) {
-            httpUtils = new MyHttpUtils(application);
-        }
-        this.baseUrl=baseUrl;
-        return basePresenter;
-    }
-
-    public static BasePresenter getInstance(){
-        if(basePresenter==null){
-            basePresenter=new BasePresenter();
-        }
-        return basePresenter;
-    }
 
     /**
      * 自定义请求头
@@ -68,61 +50,61 @@ public class BasePresenter {
     /**
      * 使用默认的请求头进行请求
      * 可能没有设置token
-     * @param methodName
+     * @param requestUrl
      * @param jsonObject
      * @param convertClass
      */
-    public  void getUseDefaultHeader(String methodName, JsonObject jsonObject,Class convertClass){
-        httpUtils.sendMsgGet(baseUrl+methodName,jsonObject,convertClass,listener);
+    public  void getUseDefaultHeader(String requestUrl, JsonObject jsonObject,Class convertClass){
+        httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
     }
 
     /**
      * 使用自定义的请求头进行请求
-     * @param methodName
+     * @param requestUrl
      * @param jsonObject
      * @param convertClass
      */
-    public  void getUseCustomerHeader(String methodName, JsonObject jsonObject,Class convertClass){
+    public  void getUseCustomerHeader(String requestUrl, JsonObject jsonObject,Class convertClass){
         if(headers.size()==0){
-            getUseDefaultHeader(baseUrl+methodName, jsonObject, convertClass);
+            getUseDefaultHeader(requestUrl, jsonObject, convertClass);
         }else {
-            httpUtils.sendMsgGet(baseUrl + methodName, headers, jsonObject, convertClass, listener);
+            httpUtils.sendMsgGet( requestUrl, headers, jsonObject, convertClass, listener);
         }
     }
 
-    public void postUseDefaultHeader(String methodName,JsonObject jsonObject,Class convertClass){
-        httpUtils.sendMsgPost(baseUrl+methodName,jsonObject,convertClass,listener);
+    public void postUseDefaultHeader(String requestUrl,JsonObject jsonObject,Class convertClass){
+        httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
     }
 
-    public void postUseCustomerHeader(String methodName,JsonObject jsonObject,Class convertClass){
+    public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass){
         if(headers.size()==0) {
-            httpUtils.sendMsgPost(baseUrl + methodName, jsonObject, convertClass, listener);
+            httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
         }else{
-            httpUtils.sendMsgPost(baseUrl+methodName,headers,jsonObject,convertClass,listener);
+            httpUtils.sendMsgPost(requestUrl,headers,jsonObject,convertClass,listener);
         }
     }
 
-    public void uploadUseDefaultHeader(String methodName, String fileName, File file, Class convertClass){
-        httpUtils.doUploadSingleFile(baseUrl+methodName, fileName,file , convertClass,listener);
+    public void uploadUseDefaultHeader(String requestUrl, String fileName, File file, Class convertClass){
+        httpUtils.doUploadSingleFile(requestUrl, fileName,file , convertClass,listener);
     }
 
-    public void uploadUseCustomerHeader(String methodName, String fileName, File file, Class convertClass){
+    public void uploadUseCustomerHeader(String requestUrl, String fileName, File file, Class convertClass){
         if(headers.size()==0) {
-            httpUtils.doUploadSingleFile(baseUrl + methodName, fileName, file, convertClass, listener);
+            httpUtils.doUploadSingleFile( requestUrl, fileName, file, convertClass, listener);
         }else{
-            httpUtils.doUploadSingleFile(baseUrl + methodName, headers,fileName, file, convertClass, listener);
+            httpUtils.doUploadSingleFile( requestUrl, headers,fileName, file, convertClass, listener);
         }
     }
 
-    public void uploadMuiltDefaultHeader(String methodName, FileListParams fileListParams, Class convertClass){
-        httpUtils.doUploadMuiltFiles(baseUrl+methodName, fileListParams , convertClass,listener);
+    public void uploadMuiltDefaultHeader(String requestUrl, FileListParams fileListParams, Class convertClass){
+        httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
     }
 
-    public void uploadMuiltUseCustomerHeader(String methodName,  FileListParams fileListParams, Class convertClass){
+    public void uploadMuiltUseCustomerHeader(String requestUrl,  FileListParams fileListParams, Class convertClass){
         if(headers.size()==0) {
-            httpUtils.doUploadMuiltFiles(baseUrl+methodName, fileListParams , convertClass,listener);
+            httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
         }else{
-            httpUtils.doUploadMuiltFiles(baseUrl + methodName, headers,fileListParams, convertClass, listener);
+            httpUtils.doUploadMuiltFiles( requestUrl, headers,fileListParams, convertClass, listener);
         }
     }
 
