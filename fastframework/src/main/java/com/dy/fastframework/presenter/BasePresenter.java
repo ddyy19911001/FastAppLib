@@ -23,12 +23,10 @@ import yin.deng.dyrequestutils.http.MyHttpUtils;
 public class BasePresenter {
     public static BasePresenter basePresenter;
     public MyHttpUtils httpUtils;
-    public MyHttpUtils.OnGetInfoListener listener;
     private List<HeaderParam> headers=new ArrayList<>();
 
 
-    public BasePresenter(Application app,IBaseView iBaseView) {
-        this.listener=iBaseView;
+    public BasePresenter(Application app) {
         httpUtils = new MyHttpUtils(app);
     }
 
@@ -41,12 +39,6 @@ public class BasePresenter {
         this.headers=headers;
     }
 
-    public BasePresenter setInfoGetListener(MyHttpUtils.OnGetInfoListener infoGetListener){
-        this.listener=infoGetListener;
-        return basePresenter;
-    }
-
-
     /**
      * 使用默认的请求头进行请求
      * 可能没有设置token
@@ -54,7 +46,7 @@ public class BasePresenter {
      * @param jsonObject
      * @param convertClass
      */
-    public  void getUseDefaultHeader(String requestUrl, JsonObject jsonObject,Class convertClass){
+    public  void getUseDefaultHeader(String requestUrl, JsonObject jsonObject, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
     }
 
@@ -64,19 +56,19 @@ public class BasePresenter {
      * @param jsonObject
      * @param convertClass
      */
-    public  void getUseCustomerHeader(String requestUrl, JsonObject jsonObject,Class convertClass){
+    public  void getUseCustomerHeader(String requestUrl, JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         if(headers.size()==0){
-            getUseDefaultHeader(requestUrl, jsonObject, convertClass);
+            getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
         }else {
             httpUtils.sendMsgGet( requestUrl, headers, jsonObject, convertClass, listener);
         }
     }
 
-    public void postUseDefaultHeader(String requestUrl,JsonObject jsonObject,Class convertClass){
+    public void postUseDefaultHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
     }
 
-    public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass){
+    public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         if(headers.size()==0) {
             httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
         }else{
@@ -84,11 +76,11 @@ public class BasePresenter {
         }
     }
 
-    public void uploadUseDefaultHeader(String requestUrl, String fileName, File file, Class convertClass){
+    public void uploadUseDefaultHeader(String requestUrl, String fileName, File file, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         httpUtils.doUploadSingleFile(requestUrl, fileName,file , convertClass,listener);
     }
 
-    public void uploadUseCustomerHeader(String requestUrl, String fileName, File file, Class convertClass){
+    public void uploadUseCustomerHeader(String requestUrl, String fileName, File file, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         if(headers.size()==0) {
             httpUtils.doUploadSingleFile( requestUrl, fileName, file, convertClass, listener);
         }else{
@@ -96,11 +88,11 @@ public class BasePresenter {
         }
     }
 
-    public void uploadMuiltDefaultHeader(String requestUrl, FileListParams fileListParams, Class convertClass){
+    public void uploadMuiltDefaultHeader(String requestUrl, FileListParams fileListParams, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
     }
 
-    public void uploadMuiltUseCustomerHeader(String requestUrl,  FileListParams fileListParams, Class convertClass){
+    public void uploadMuiltUseCustomerHeader(String requestUrl,  FileListParams fileListParams, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         if(headers.size()==0) {
             httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
         }else{
