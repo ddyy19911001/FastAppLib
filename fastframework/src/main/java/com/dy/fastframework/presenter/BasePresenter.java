@@ -50,6 +50,10 @@ public class BasePresenter {
         httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
     }
 
+    public  void getUseDefaultHeader(String requestUrl, HashMap<String,String> jsonObject, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
+    }
+
     /**
      * 使用自定义的请求头进行请求
      * @param requestUrl
@@ -64,11 +68,33 @@ public class BasePresenter {
         }
     }
 
+    public  void getUseCustomerHeader(String requestUrl, HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        if(headers.size()==0){
+            getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
+        }else {
+            httpUtils.sendMsgGet( requestUrl, headers, jsonObject, convertClass, listener);
+        }
+    }
+
+
+
     public void postUseDefaultHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
     }
 
+    public void postUseDefaultHeader(String requestUrl,HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
+    }
+
     public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        if(headers.size()==0) {
+            httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
+        }else{
+            httpUtils.sendMsgPost(requestUrl,headers,jsonObject,convertClass,listener);
+        }
+    }
+
+    public void postUseCustomerHeader(String requestUrl,HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
         if(headers.size()==0) {
             httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
         }else{
