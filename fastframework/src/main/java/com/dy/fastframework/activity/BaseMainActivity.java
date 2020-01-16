@@ -69,7 +69,8 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
             ivLayoutParams.bottomMargin = ScreenUtils.dipTopx(this, getRootItemViewBuilder().marginBottomInDp);
             ivLayoutParams.leftMargin = ScreenUtils.dipTopx(this, getRootItemViewBuilder().marginLeftInDp);
             ivLayoutParams.rightMargin = ScreenUtils.dipTopx(this, getRootItemViewBuilder().marginRightInDp);
-            ivLayoutParams.gravity = getTabTextBuilder().gravity;
+            ivLayoutParams.gravity = getRootItemViewBuilder().gravity;
+            ivLayoutParams.weight = getRootItemViewBuilder().weightInDp;
         }
     }
 
@@ -196,6 +197,7 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         private float marginTopInDp;
         private float marginBottomInDp;
         private float marginInDp;
+        private int weightInDp;
         private static ConfigBuild configBuild;
         private ConfigBuild(){}
         public static ConfigBuild getInstance(){
@@ -236,6 +238,11 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
 
         public ConfigBuild setGravityInDp(int gravity){
             this.gravity=gravity;
+            return configBuild;
+        }
+
+        public ConfigBuild setWeight(int params){
+            this.weightInDp=params;
             return configBuild;
         }
 
