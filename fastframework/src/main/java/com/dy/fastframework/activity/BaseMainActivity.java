@@ -316,7 +316,6 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
 
 
     public void showUiWhenPageSelected(int position) {
-        bottomTabHolders.get(position).ivIcon.setImageResource(mSelectIcons[position]);
         bottomTabHolders.get(position).tvTabName.setText(mTabText[position]);
         setSelectPage(position);
         if(onPageSeletctedListener!=null){
