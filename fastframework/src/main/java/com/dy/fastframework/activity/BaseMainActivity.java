@@ -339,7 +339,11 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
      * @param i
      */
     public void initHolder(ViewHolder holder, final int i) {
-        holder.ivIcon.setImageResource(mNormalIcons[i]);
+        if(getNormalIconsForHttpUrl()!=null){
+            ImageLoadUtil.loadImage(holder.ivIcon, getNormalIconsForHttpUrl()[i]);
+        }else {
+            holder.ivIcon.setImageResource(mNormalIcons[i]);
+        }
         if(normalTextColor!=0) {
             holder.tvTabName.setTextColor(normalTextColor);
         }
