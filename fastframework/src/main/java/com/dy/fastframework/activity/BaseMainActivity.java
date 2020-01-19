@@ -14,6 +14,7 @@ import com.dy.fastframework.view.NoScrollViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
+import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.superbase.activity.ScreenUtils;
 import yin.deng.superbase.activity.SuperBaseActivity;
@@ -29,6 +30,10 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
     private int[] mNormalIcons;
     //选中时icon
     private int[] mSelectIcons;
+    //未选中icon
+    private String[] mNormalIconUrls;
+    //选中时icon
+    private String[] mSelectIconUrls;
     private List<Fragment> mFragmentLists = new ArrayList<>();
     private LinearLayout mNavigationBar;
     public List<ViewHolder> bottomTabHolders=new ArrayList<>();
@@ -41,7 +46,11 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
     //这个是装底部按钮的容器
     public abstract LinearLayout getNavigationBar();
     public abstract int[] getNormalIcons();
+    //支持网络请求回来的图片设置
+    public String[] getNormalIconsForHttpUrl(){return null;}
     public abstract int[] getSelectIcons();
+    //支持网络请求回来的图片设置
+    public String[] getSelectIconsForHttpUrl(){return null;}
     public abstract int getNormalTextColor();
     public abstract int getSelectedTextColor();
     public abstract String[] getTabTexts();
@@ -114,6 +123,8 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         mNavigationBar=getNavigationBar();
         mNormalIcons=getNormalIcons();
         mSelectIcons=getSelectIcons();
+        mNormalIconUrls=getNormalIconsForHttpUrl();
+        mSelectIconUrls=getSelectIconsForHttpUrl();
         mTabText=getTabTexts();
         mFragmentLists=getFragments();
         if(getNoScrollViewPager()==null) {
@@ -126,6 +137,8 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         initTabs();
     }
 
+
+
     /**
      * 如果不需要滑动，则重写此方法
      * @return
@@ -136,54 +149,105 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
 
 
     private void initTabs() {
-        if(mNavigationBar!=null&&
-           mTabText!=null&&
-           mTabText.length>0&&
-           mNormalIcons!=null&&
-           mNormalIcons.length>0&&
-           mNormalIcons.length==mTabText.length&&
-           mSelectIcons!=null&&
-           mSelectIcons.length>0&&
-           mSelectIcons.length==mNormalIcons.length&&
-           mFragmentLists!=null&&mFragmentLists.size()>0&&
-           mFragmentLists.size()==mTabText.length){
-           bottomTabHolders.clear();
-           mNavigationBar.removeAllViews();
-            //符合要求
-            for(int i=0;i<mTabText.length;i++){
-                View itemView=View.inflate(this, R.layout.default_navigation_item, null);
-                ViewHolder holder=new ViewHolder(itemView);
-                bottomTabHolders.add(holder);
-                initHolder(holder,i);
-                mNavigationBar.addView(itemView);
-                LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) itemView.getLayoutParams();
-                params.weight=1;
-                onBuilderRootViewLayoutParams(params);
-                itemView.setLayoutParams(params);
+        if(mSelectIconUrls!=null&&mNormalIconUrls!=null){
+            if (mNavigationBar != null &&
+                    mTabText != null &&
+                    mTabText.length > 0 &&
+                    mNormalIconUrls.length > 0 &&
+                    mNormalIconUrls.length == mTabText.length &&
+                    mSelectIconUrls != null &&
+                    mSelectIconUrls.length > 0 &&
+                    mSelectIconUrls.length == mNormalIconUrls.length &&
+                    mFragmentLists != null && mFragmentLists.size() > 0 &&
+                    mFragmentLists.size() == mTabText.length) {
+                bottomTabHolders.clear();
+                mNavigationBar.removeAllViews();
+                //符合要求
+                for (int i = 0; i < mTabText.length; i++) {
+                    View itemView = View.inflate(this, R.layout.default_navigation_item, null);
+                    ViewHolder holder = new ViewHolder(itemView);
+                    bottomTabHolders.add(holder);
+                    initHolder(holder, i);
+                    mNavigationBar.addView(itemView);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) itemView.getLayoutParams();
+                    params.weight = 1;
+                    onBuilderRootViewLayoutParams(params);
+                    itemView.setLayoutParams(params);
+                }
+                BasePagerAdapter pagerAdapter = new BasePagerAdapter(getSupportFragmentManager(), mFragmentLists);
+                mViewPager.setOffscreenPageLimit(mTabText.length / 2 + 1);
+                mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        showUiWhenPageSelected(position);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+                mViewPager.setAdapter(pagerAdapter);
+                setSelectPage(getDefaultSelectedIconIndex());
+            } else {
+                //不符合要求
+                LogUtils.e("参数未设置或不符合要求，无法构建");
             }
-            BasePagerAdapter pagerAdapter=new BasePagerAdapter(getSupportFragmentManager(), mFragmentLists);
-            mViewPager.setOffscreenPageLimit(mTabText.length/2+1);
-            mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        }else {
+            if (mNavigationBar != null &&
+                    mTabText != null &&
+                    mTabText.length > 0 &&
+                    mNormalIcons != null &&
+                    mNormalIcons.length > 0 &&
+                    mNormalIcons.length == mTabText.length &&
+                    mSelectIcons != null &&
+                    mSelectIcons.length > 0 &&
+                    mSelectIcons.length == mNormalIcons.length &&
+                    mFragmentLists != null && mFragmentLists.size() > 0 &&
+                    mFragmentLists.size() == mTabText.length) {
+                bottomTabHolders.clear();
+                mNavigationBar.removeAllViews();
+                //符合要求
+                for (int i = 0; i < mTabText.length; i++) {
+                    View itemView = View.inflate(this, R.layout.default_navigation_item, null);
+                    ViewHolder holder = new ViewHolder(itemView);
+                    bottomTabHolders.add(holder);
+                    initHolder(holder, i);
+                    mNavigationBar.addView(itemView);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) itemView.getLayoutParams();
+                    params.weight = 1;
+                    onBuilderRootViewLayoutParams(params);
+                    itemView.setLayoutParams(params);
                 }
+                BasePagerAdapter pagerAdapter = new BasePagerAdapter(getSupportFragmentManager(), mFragmentLists);
+                mViewPager.setOffscreenPageLimit(mTabText.length / 2 + 1);
+                mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                @Override
-                public void onPageSelected(int position) {
-                    showUiWhenPageSelected(position);
-                }
+                    }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+                    @Override
+                    public void onPageSelected(int position) {
+                        showUiWhenPageSelected(position);
+                    }
 
-                }
-            });
-            mViewPager.setAdapter(pagerAdapter);
-            setSelectPage(getDefaultSelectedIconIndex());
-        }else{
-            //不符合要求
-            LogUtils.e("参数未设置或不符合要求，无法构建");
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+                mViewPager.setAdapter(pagerAdapter);
+                setSelectPage(getDefaultSelectedIconIndex());
+            } else {
+                //不符合要求
+                LogUtils.e("参数未设置或不符合要求，无法构建");
+            }
         }
     }
 
@@ -316,9 +380,16 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         clearAllImageAndTextColor();
         nowSelectedIndex=i;
         mViewPager.setCurrentItem(i);
-        bottomTabHolders.get(i).ivIcon.setImageResource(mSelectIcons[i]);
-        if(selectedTextColor!=0) {
-            bottomTabHolders.get(i).tvTabName.setTextColor(selectedTextColor);
+        if(mSelectIconUrls!=null){
+            ImageLoadUtil.loadImage(bottomTabHolders.get(i).ivIcon,mSelectIconUrls[i]);
+            if (selectedTextColor != 0) {
+                bottomTabHolders.get(i).tvTabName.setTextColor(selectedTextColor);
+            }
+        }else {
+            bottomTabHolders.get(i).ivIcon.setImageResource(mSelectIcons[i]);
+            if (selectedTextColor != 0) {
+                bottomTabHolders.get(i).tvTabName.setTextColor(selectedTextColor);
+            }
         }
     }
 
@@ -330,7 +401,11 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
             if(normalTextColor!=0) {
                 bottomTabHolders.get(i).tvTabName.setTextColor(normalTextColor);
             }
-            bottomTabHolders.get(i).ivIcon.setImageResource(getNormalIcons()[i]);
+            if(getNormalIconsForHttpUrl()!=null){
+                ImageLoadUtil.loadImage(bottomTabHolders.get(i).ivIcon, getNormalIconsForHttpUrl()[i]);
+            }else {
+                bottomTabHolders.get(i).ivIcon.setImageResource(getNormalIcons()[i]);
+            }
         }
     }
 
