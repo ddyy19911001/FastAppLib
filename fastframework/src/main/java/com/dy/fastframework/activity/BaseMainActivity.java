@@ -339,7 +339,7 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
      */
     public void initHolder(ViewHolder holder, final int i) {
         if(getNormalIconsForHttpUrl()!=null){
-            ImageLoadUtil.loadImage(holder.ivIcon, getNormalIconsForHttpUrl()[i]);
+            showImage(holder.ivIcon, getNormalIconsForHttpUrl()[i]);
         }else {
             holder.ivIcon.setImageResource(mNormalIcons[i]);
         }
@@ -384,7 +384,7 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         nowSelectedIndex=i;
         mViewPager.setCurrentItem(i);
         if(mSelectIconUrls!=null){
-            ImageLoadUtil.loadImage(bottomTabHolders.get(i).ivIcon,mSelectIconUrls[i]);
+            showImage(bottomTabHolders.get(i).ivIcon,mSelectIconUrls[i]);
             if (selectedTextColor != 0) {
                 bottomTabHolders.get(i).tvTabName.setTextColor(selectedTextColor);
             }
@@ -396,6 +396,10 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         }
     }
 
+    public void showImage(ImageView iv,String url) {
+        ImageLoadUtil.loadImage(iv,url);
+    }
+
     /**
      * 清空所有选中效果
      */
@@ -405,7 +409,7 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
                 bottomTabHolders.get(i).tvTabName.setTextColor(normalTextColor);
             }
             if(getNormalIconsForHttpUrl()!=null){
-                ImageLoadUtil.loadImage(bottomTabHolders.get(i).ivIcon, getNormalIconsForHttpUrl()[i]);
+                showImage(bottomTabHolders.get(i).ivIcon, getNormalIconsForHttpUrl()[i]);
             }else {
                 bottomTabHolders.get(i).ivIcon.setImageResource(getNormalIcons()[i]);
             }
