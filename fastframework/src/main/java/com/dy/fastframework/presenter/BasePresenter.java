@@ -23,7 +23,7 @@ import yin.deng.dyrequestutils.http.MyHttpUtils;
 public class BasePresenter {
     public static BasePresenter basePresenter;
     public MyHttpUtils httpUtils;
-    private List<HeaderParam> headers=new ArrayList<>();
+    public List<HeaderParam> headers=new ArrayList<>();
 
 
     public BasePresenter(Application app) {
