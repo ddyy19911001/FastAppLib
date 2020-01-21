@@ -25,21 +25,21 @@ import yin.deng.superbase.fragment.BasePagerAdapter;
  * 在需要开始执行初始化的时候调用initBottomTab();开始初始化整个界面
  */
 public abstract class BaseMainActivity extends SuperBaseActivity {
-    private String[] mTabText;
+    public String[] mTabText;
     //未选中icon
-    private int[] mNormalIcons;
+    public int[] mNormalIcons;
     //选中时icon
-    private int[] mSelectIcons;
+    public int[] mSelectIcons;
     //未选中icon
-    private String[] mNormalIconUrls;
+    public String[] mNormalIconUrls;
     //选中时icon
-    private String[] mSelectIconUrls;
-    private List<Fragment> mFragmentLists = new ArrayList<>();
-    private LinearLayout mNavigationBar;
+    public String[] mSelectIconUrls;
+    public List<Fragment> mFragmentLists = new ArrayList<>();
+    public LinearLayout mNavigationBar;
     public List<ViewHolder> bottomTabHolders=new ArrayList<>();
     public ViewPager mViewPager;
-    private OnPageSeletctedListener onPageSeletctedListener;
-    private int nowSelectedIndex=0;
+    public OnPageSeletctedListener onPageSeletctedListener;
+    public int nowSelectedIndex=0;
 
     @Override
     public abstract int setLayout();
@@ -148,7 +148,7 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
     }
 
 
-    private void initTabs() {
+    public void initTabs() {
         if(mSelectIconUrls!=null&&mNormalIconUrls!=null){
             if (mNavigationBar != null &&
                     mTabText != null &&
