@@ -305,6 +305,10 @@ public abstract class BaseRecycleViewFragment<T> extends ViewPagerSuperBaseFragm
         if(list.size()==0){
             if(!FRefresh){
                 refreshLayout.setLoadmoreFinished(true);
+                page--;
+                if(page<=defaultPage){
+                    page=defaultPage;
+                }
             }
         }
         mDatas.addAll(list);

@@ -312,6 +312,10 @@ public abstract class BaseRecycleViewActivity<T> extends SuperBaseActivity imple
         if(list.size()==0){
             if(!FRefresh){
                refreshLayout.setLoadmoreFinished(true);
+               page--;
+               if(page<=defaultPage){
+                   page=defaultPage;
+               }
             }
         }
         mDatas.addAll(list);
