@@ -23,7 +23,7 @@ public class ActivityLoadUtil {
 
 
     public StatusLayoutManager useDefaultLoadLayout(View view, OnStatusChildClickListener childClickListener){
-        StatusLayoutManager manager=  useCustomLayout(view, me.bakumon.statuslayoutmanager.library.R.layout.layout_status_layout_manager_loading,R.layout.defualt_empty_layout,R.layout.defualt_empty_layout,R.id.re_try_bt,childClickListener);
+        StatusLayoutManager manager=  useCustomLayout(view, R.layout.default_loading_layout,R.layout.defualt_empty_layout,R.layout.defualt_empty_layout,R.id.re_try_bt,childClickListener);
         return manager;
     }
 

@@ -19,10 +19,13 @@ import com.dy.fastframework.downloader.OnStartOrResumeListener;
 import com.dy.fastframework.downloader.PRDownloader;
 import com.dy.fastframework.downloader.Progress;
 import com.dy.fastframework.downloader.utils.Utils;
+import com.dy.fastframework.view.CommonProgressDialog;
+
 import java.io.File;
 import java.util.List;
 
 import yin.deng.dyrequestutils.http.LogUtils;
+import yin.deng.normalutils.utils.NoDoubleClickListener;
 import yin.deng.superbase.activity.SuperBaseActivity;
 import yin.deng.superbase.activity.permission.PermissionListener;
 
@@ -34,7 +37,7 @@ public class UpdateManager {
    private static UpdateManager updateManager;
     private static String dirPath="";
     private String apkPath;
-    private ProgressDialog progressDialog;
+    private CommonProgressDialog progressDialog;
 
     private UpdateManager() {
     }
@@ -83,9 +86,7 @@ public class UpdateManager {
 
     /**
      * 请求权限并开始下载
-     * @param updateInfo
      * @param activity
-     * @param PermissionListener
      */
     public void requestPermissionAndDownLoadStart(final SuperBaseActivity activity,PermissionListener permissionListener) {
         dirPath = Utils.getRootDirPath(activity)+ File.separator;
@@ -134,29 +135,31 @@ public class UpdateManager {
 
     public void showProgressDialog(SuperBaseActivity activity, UpdateInfo updateInfo,int appLogo) {
         if(progressDialog==null) {
-            progressDialog = new ProgressDialog(activity);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setTitle("正在下载 v" + updateInfo.getName()+"版本");
-            progressDialog.setIcon(appLogo);
-            progressDialog.setMessage(updateInfo.getMemo());
+            progressDialog = new CommonProgressDialog(activity);
+            progressDialog.getHolder().llProgress.setVisibility(View.VISIBLE);
+            progressDialog.getHolder().tvTitle.setText("发现新版本（v" + updateInfo.getName()+"）");
+            progressDialog.getHolder().tvContent.setText("正在更新，请耐心等待...");
             progressDialog.setCancelable(false);// 能够返回
             progressDialog.setCanceledOnTouchOutside(false);// 点击外部返回
-            progressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,"后台下载",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            progressDialog=null;
-                        }
-                    });
+            progressDialog.getHolder().tvCancle.setVisibility(View.GONE);
+            progressDialog.getHolder().tvMiddle.setVisibility(View.GONE);
+            progressDialog.getHolder().tvSure.setText("后台下载");
+            progressDialog.getHolder().tvSure.setOnClickListener(new NoDoubleClickListener() {
+                @Override
+                protected void onNoDoubleClick(View v) {
+                    progressDialog.dismiss();
+                    progressDialog=null;
+                }
+            });
         }
         progressDialog.show();
     }
 
     public void updateProgress(Progress progress){
         if(progressDialog!=null&&progressDialog.isShowing()){
-            progressDialog.setProgress((int) (progress.currentBytes/1024));
-            progressDialog.setMax((int) (progress.totalBytes/1024));
+            progressDialog.getHolder().progressBar.setProgress((int) (progress.currentBytes/1024));
+            progressDialog.getHolder().progressBar.setMax((int) (progress.totalBytes/1024));
+            progressDialog.getHolder().tvProgress.setText((int) (progress.currentBytes/1024)+"%");
         }
     }
 

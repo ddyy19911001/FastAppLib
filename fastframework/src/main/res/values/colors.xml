@@ -3,4 +3,5 @@
     <color name="white">#FFFFFF</color>
     <color name="retry_color">#FF00AAEE</color>
     <color name="progress_bar_color">#FF2187FF</color>
+    <color name="status_layout_background_color">#FFFFFF</color>
 </resources>
