@@ -159,7 +159,7 @@ public class UpdateManager {
         if(progressDialog!=null&&progressDialog.isShowing()){
             progressDialog.getHolder().progressBar.setProgress((int) (progress.currentBytes/1024));
             progressDialog.getHolder().progressBar.setMax((int) (progress.totalBytes/1024));
-            progressDialog.getHolder().tvProgress.setText((int) (progress.currentBytes/1024)+"%");
+            progressDialog.getHolder().tvProgress.setText((int) (progress.currentBytes*100/progress.totalBytes)+"%");
         }
     }
 
