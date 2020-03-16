@@ -1,5 +1,6 @@
 package com.dy.fastdemo;
 
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -8,13 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dy.fastframework.activity.BaseMainActivity;
+import com.dy.fastframework.view.CommonMsgDialog;
 import com.dy.fastframework.view.NoScrollViewPager;
+import com.dy.fastframework.view.NoticeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.LogUtils;
+import yin.deng.normalutils.utils.NoDoubleClickListener;
 
 public class TestMainAc extends BaseMainActivity {
     private ViewPager vp;
@@ -22,6 +26,11 @@ public class TestMainAc extends BaseMainActivity {
     @Override
     public int setLayout() {
         return R.layout.test_main_ac;
+    }
+
+    @Override
+    public boolean setIsExitActivity() {
+        return true;
     }
 
     @Override
@@ -123,5 +132,20 @@ public class TestMainAc extends BaseMainActivity {
             }
         });
         EventHolder.getInstance().post(1, "我是要发送的内容");
+        final NoticeDialog msgDialog=new NoticeDialog(this);
+        msgDialog.getHolder().tvContent.setText("我是测试的内容");
+        msgDialog.getHolder().tvSure.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                msgDialog.dismiss();
+            }
+        });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                msgDialog.show();
+            }
+        }, 1000);
+
     }
 }

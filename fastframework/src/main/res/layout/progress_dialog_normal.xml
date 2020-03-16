@@ -90,7 +90,7 @@
             android:layout_marginBottom="20dp"
             android:lineSpacingExtra="5dp"
             android:text="正在更新，请耐心等待..."
-            android:textColor="#ff444444"
+            android:textColor="#ff222222"
             android:textSize="16sp"
             />
     </LinearLayout>

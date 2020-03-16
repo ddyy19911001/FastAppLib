@@ -59,7 +59,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="25dp"
                 android:lineSpacingExtra="5dp"
-                android:textColor="#666666"
+                android:textColor="#ff222222"
                 android:textSize="16sp"
                 />
         </LinearLayout>
