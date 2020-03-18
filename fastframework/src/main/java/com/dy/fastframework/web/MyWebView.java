@@ -124,6 +124,7 @@ public class MyWebView extends WebView {
         webSetting.setAppCacheEnabled(true);
         webSetting.setDomStorageEnabled(true);
         webSetting.setJavaScriptEnabled(true);
+        webSetting.setDisplayZoomControls(false);
         webSetting.setGeolocationEnabled(true);
         webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
         webSetting.setAppCachePath(context.getDir("appcache", 0).getPath());
