@@ -20,7 +20,7 @@ import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
 
-public class TestMainAc extends BaseMainActivity {
+public class EventHolderTestMainAc extends BaseMainActivity {
     private ViewPager vp;
     private LinearLayout llNavigation;
     @Override

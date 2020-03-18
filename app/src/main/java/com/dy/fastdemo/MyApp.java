@@ -9,4 +9,9 @@ public class MyApp extends SuperBaseApp {
         super.onCreate();
 
     }
+
+    @Override
+    public boolean isEnableDebugLog() {
+        return true;
+    }
 }

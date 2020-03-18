@@ -1,6 +1,7 @@
 package com.dy.fastframework.presenter;
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.google.gson.JsonObject;
 
@@ -21,22 +22,53 @@ import yin.deng.dyrequestutils.http.MyHttpUtils;
  * setCustomerHeader可自定义请求头
  */
 public class BasePresenter {
-    public static BasePresenter basePresenter;
     public MyHttpUtils httpUtils;
     public List<HeaderParam> headers=new ArrayList<>();
-
-
+    public String logTag="DYLOG";
     public BasePresenter(Application app) {
-        httpUtils = new MyHttpUtils(app);
+        initHttpUtils(app);
+    }
+
+
+
+    /**
+     * 初始化请求工具
+     * 可以重写此方法自行配置httpUtils
+     * @param app
+     */
+    public void initHttpUtils(Application app) {
+        String downloadFileDir = Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_download/";
+        String cacheDir = Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_cache";
+        httpUtils = new MyHttpUtils(app,15,true,logTag,downloadFileDir,cacheDir);
+    }
+
+    /**
+     * 初始化请求工具
+     * 可以重写此方法自行配置httpUtils
+     * @param app
+     */
+    public void initHttpUtils(Application app,int timeOutSeconds) {
+        String downloadFileDir = Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_download/";
+        String cacheDir = Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_cache";
+        httpUtils = new MyHttpUtils(app,timeOutSeconds,true,logTag,downloadFileDir,cacheDir);
     }
 
 
     /**
      * 自定义请求头
+     * 注意：此方法只适用于继承此类后使用过此方法的类
      * @param headers
      */
     public void setCustomerHeader(List<HeaderParam> headers){
         this.headers=headers;
+    }
+
+    /**
+     * 此方法在每次请求时都会被调用
+     * 可在此处设置不同的headers
+     */
+    public void initCustomerHeader() {
+
     }
 
     /**
@@ -61,6 +93,7 @@ public class BasePresenter {
      * @param convertClass
      */
     public  void getUseCustomerHeader(String requestUrl, JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0){
             getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
         }else {
@@ -68,7 +101,10 @@ public class BasePresenter {
         }
     }
 
+
+
     public  void getUseCustomerHeader(String requestUrl, HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0){
             getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
         }else {
@@ -87,6 +123,7 @@ public class BasePresenter {
     }
 
     public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0) {
             httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
         }else{
@@ -95,6 +132,7 @@ public class BasePresenter {
     }
 
     public void postUseCustomerHeader(String requestUrl,HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0) {
             httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
         }else{
@@ -107,6 +145,7 @@ public class BasePresenter {
     }
 
     public void uploadUseCustomerHeader(String requestUrl, String fileName, File file, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0) {
             httpUtils.doUploadSingleFile( requestUrl, fileName, file, convertClass, listener);
         }else{
@@ -119,6 +158,7 @@ public class BasePresenter {
     }
 
     public void uploadMuiltUseCustomerHeader(String requestUrl,  FileListParams fileListParams, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
+        initCustomerHeader();
         if(headers.size()==0) {
             httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
         }else{
