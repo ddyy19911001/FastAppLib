@@ -1,6 +1,10 @@
 package com.dy.fastdemo;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -8,20 +12,22 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
-import com.dy.fastframework.activity.BaseActivity;
 import com.dy.fastframework.activity.BaseTabViewActivity;
+import com.dy.fastframework.notification.NotificationUtils;
+import com.dy.fastframework.service.NotifyService;
 import com.dy.fastframework.tablayout.RecyclerTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import yin.deng.superbase.fragment.BasePagerAdapter;
+import yin.deng.normalutils.utils.LogUtils;
 
-public class TabTestActivity extends BaseTabViewActivity {
+public class TabTestActivity extends BaseTabViewActivity implements ServiceConnection {
     private RecyclerTabLayout recyclerTabLayout;
     private ViewPager viewpager;
     private MyTestFragment ys1;
     private MyTestFragment ys2;
+    private Intent intent;
 
     @Override
     public int setLayout() {
@@ -38,6 +44,10 @@ public class TabTestActivity extends BaseTabViewActivity {
     @Override
     public void initFirst() {
         initPageItem();
+        intent=new Intent();
+        intent.setClass(mActivity, NotifyService.class);
+        startService(intent);
+        bindService(intent, this,BIND_AUTO_CREATE);
     }
 
     @Override
@@ -96,4 +106,15 @@ public class TabTestActivity extends BaseTabViewActivity {
     }
 
 
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        LogUtils.i("服务启动成功");
+        NotifyService.MyWorkService workService= (NotifyService.MyWorkService) service;
+        workService.startForeground(1, NotificationUtils.getProgressNotification(this, TabTestActivity.class, R.mipmap.icon, "重要通知",50));
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+    }
 }

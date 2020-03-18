@@ -24,9 +24,11 @@ import yin.deng.refreshlibrary.refresh.viewimpl.MyHeaderView;
 
 public abstract class SuperBaseApp extends Application {
     private static SharedPreferenceUtil util;
+    public static SuperBaseApp app;
     @Override
     public void onCreate() {
         super.onCreate();
+        app=this;
         initDebugMode(isEnableDebugLog());
         if(isEnableDebugLog()){
             EventReceiver.getInstance().register();
@@ -36,6 +38,8 @@ public abstract class SuperBaseApp extends Application {
         CrashHandler.getInstance().init(this);
         util=new SharedPreferenceUtil(this, getApplicationInfo().packageName);
     }
+
+
 
     /**
      * 可以指定全局header和footer
