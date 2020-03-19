@@ -91,6 +91,7 @@ public class CommonMsgDialog extends Dialog {
         public TextView tvCancle;
         public TextView tvMiddle;
         public TextView tvSure;
+        public TextView tvHLine;
 
         public  ViewHolder(View view) {
             fmImgAd = (FrameLayout) view.findViewById(R.id.fm_img_ad);
@@ -106,7 +107,7 @@ public class CommonMsgDialog extends Dialog {
             tvCancle = (TextView) view.findViewById(R.id.tv_cancle);
             tvMiddle = (TextView) view.findViewById(R.id.tv_middle);
             tvSure = (TextView) view.findViewById(R.id.tv_sure);
-
+            tvHLine = (TextView) view.findViewById(R.id.tv_h_line);
         }
 
         public View getView(View view,int id){
