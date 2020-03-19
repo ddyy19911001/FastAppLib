@@ -14,5 +14,5 @@ Add it in your root build.gradle at the end of repositories:
 # Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.ddyy19911001:FastAppLib:1.7'
+	        implementation 'com.github.ddyy19911001:FastAppLib:2.0'
 	}
