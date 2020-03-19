@@ -204,6 +204,7 @@ public class UpdateManager {
                     }
                 });
             }else{
+                progressDialog.getHolder().tvHLine.setVisibility(View.GONE);
                 progressDialog.getHolder().llBottom.setVisibility(View.GONE);
             }
         }
