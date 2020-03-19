@@ -3,6 +3,7 @@ package com.dy.fastframework.update;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,12 +20,14 @@ import com.dy.fastframework.downloader.OnStartOrResumeListener;
 import com.dy.fastframework.downloader.PRDownloader;
 import com.dy.fastframework.downloader.Progress;
 import com.dy.fastframework.downloader.utils.Utils;
+import com.dy.fastframework.view.CommonMsgDialog;
 import com.dy.fastframework.view.CommonProgressDialog;
 
 import java.io.File;
 import java.util.List;
 
 import yin.deng.dyrequestutils.http.LogUtils;
+import yin.deng.normalutils.utils.MyUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
 import yin.deng.superbase.activity.SuperBaseActivity;
 import yin.deng.superbase.activity.permission.PermissionListener;
@@ -79,10 +82,18 @@ public class UpdateManager {
 
             @Override
             public void onDenied(List<String> deniedPermission) {
-                activity.showTs("请授予应用读取/写入内部存储相关权限");
+                showNomalMsg(activity,"无法获取到应用读取/写入内部存储相关权限，下载失败！");
             }
         });
     }
+
+
+    public void showNomalMsg(Context context,String msg){
+        final CommonMsgDialog msgDialog=new CommonMsgDialog(context);
+        msgDialog.getHolder().tvTitle.setText("系统提示");
+        msgDialog.showMsg(msg);
+    }
+
 
     /**
      * 请求权限并开始下载
@@ -95,6 +106,19 @@ public class UpdateManager {
     }
 
 
+
+    OnUpdateListener onUpdateListener;
+
+    public void setOnUpdateListener(OnUpdateListener onUpdateListener) {
+        this.onUpdateListener = onUpdateListener;
+    }
+
+    public interface OnUpdateListener{
+        void onStartDown();
+        void onFailed(String reason);
+        void onSuccess();
+    }
+
     /**
      * 此处开始真正的下载操作
      * @param updateInfo
@@ -103,11 +127,16 @@ public class UpdateManager {
     public void downLoadStart(final UpdateInfo updateInfo, final SuperBaseActivity activity, final int appLogo) {
         String saveName=activity.getResources().getString(R.string.app_name)+"_"+updateInfo.getName()+".apk";
         apkPath=dirPath+saveName;
+        activity.showLoadingDialog("数据获取中...", false);
         PRDownloader.download(updateInfo.getUrl(),dirPath,
                 saveName)
         .build().setOnStartOrResumeListener(new OnStartOrResumeListener() {
             @Override
             public void onStartOrResume() {
+                if(onUpdateListener!=null){
+                    onUpdateListener.onStartDown();
+                }
+                activity.closeDialog();
                 showProgressDialog(activity,updateInfo,appLogo);
             }
         }).setOnProgressListener(new OnProgressListener() {
@@ -119,6 +148,10 @@ public class UpdateManager {
         }).start(new OnDownloadListener() {
             @Override
             public void onDownloadComplete() {
+                if(onUpdateListener!=null){
+                    onUpdateListener.onSuccess();
+                }
+                activity.closeDialog();
                 if(progressDialog!=null&&progressDialog.isShowing()){
                     progressDialog.dismiss();
                     progressDialog=null;
@@ -128,29 +161,51 @@ public class UpdateManager {
 
             @Override
             public void onError(Error error) {
-                activity.showTs("下载失败:"+error.getServerErrorMessage());
+                activity.closeDialog();
+                if(onUpdateListener!=null){
+                    onUpdateListener.onFailed(error.getServerErrorMessage());
+                }
+                if(MyUtils.isEmpty(error.getServerErrorMessage())){
+                    activity.showTs("下载失败：未知错误");
+                }else {
+                    activity.showTs("下载失败:" + error.getServerErrorMessage());
+                }
             }
         });
     }
+
+
+    boolean isEnableBackDownLoad=true;
+    public void isEnableBackDownLoad(boolean isEnable){
+        isEnableBackDownLoad=isEnable;
+    }
+
+    public String progressContent;
+    public String progressTitle;
+    public String backDownButtonText;
 
     public void showProgressDialog(SuperBaseActivity activity, UpdateInfo updateInfo,int appLogo) {
         if(progressDialog==null) {
             progressDialog = new CommonProgressDialog(activity);
             progressDialog.getHolder().llProgress.setVisibility(View.VISIBLE);
-            progressDialog.getHolder().tvTitle.setText("发现新版本（v" + updateInfo.getName()+"）");
-            progressDialog.getHolder().tvContent.setText("正在更新，请耐心等待...");
+            progressDialog.getHolder().tvTitle.setText(progressTitle==null?"发现新版本（v" + updateInfo.getName()+"）":progressTitle);
+            progressDialog.getHolder().tvContent.setText(progressContent==null?"正在更新，请耐心等待...":progressContent);
             progressDialog.setCancelable(false);// 能够返回
             progressDialog.setCanceledOnTouchOutside(false);// 点击外部返回
             progressDialog.getHolder().tvCancle.setVisibility(View.GONE);
             progressDialog.getHolder().tvMiddle.setVisibility(View.GONE);
-            progressDialog.getHolder().tvSure.setText("后台下载");
-            progressDialog.getHolder().tvSure.setOnClickListener(new NoDoubleClickListener() {
-                @Override
-                protected void onNoDoubleClick(View v) {
-                    progressDialog.dismiss();
-                    progressDialog=null;
-                }
-            });
+            if(isEnableBackDownLoad) {
+                progressDialog.getHolder().tvSure.setText(backDownButtonText==null?"后台下载":backDownButtonText);
+                progressDialog.getHolder().tvSure.setOnClickListener(new NoDoubleClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+                        progressDialog.dismiss();
+                        progressDialog = null;
+                    }
+                });
+            }else{
+                progressDialog.getHolder().llBottom.setVisibility(View.GONE);
+            }
         }
         progressDialog.show();
     }
