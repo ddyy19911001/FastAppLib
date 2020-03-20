@@ -30,9 +30,11 @@ import yin.deng.superbase.activity.SuperBaseActivity;
 
 /**
  * recycleView界面的快速开发
- * @param <T> 数据源
+ * @param <T> 列表数据（是list里面的数据）
+ * @param <V> 服务器返回数据（服务器返回的包含list的整体类）
+ * 注意：init里面要初始化initRecycle()/initAdapter()-----最后在需要的地方调用loadDataAtFirst()请求数据
  */
-public abstract class BaseRecycleViewActivity<T> extends SuperBaseActivity implements
+public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity implements
         OnRefreshListener, OnLoadmoreListener, MyHttpUtils.OnGetInfoListener, OnStatusChildClickListener {
     public List<T> mDatas=new ArrayList<>();
     public MyQuckAdapter<T> mAdapter;
@@ -156,7 +158,7 @@ public abstract class BaseRecycleViewActivity<T> extends SuperBaseActivity imple
      * @param info
      * @return
      */
-    protected abstract List<T> convertInfoDataToList(String requestUrl, Object info);
+    protected abstract List<T> convertInfoDataToList(V requestUrl, HttpInfo info);
 
     /**
      * 数据请求失败
@@ -268,16 +270,19 @@ public abstract class BaseRecycleViewActivity<T> extends SuperBaseActivity imple
     }
 
 
+    @Override
+    public void onInfoGet(Object info, HttpInfo httpInfo) {
+        V obj= (V) info;
+        List<T> listData = convertInfoDataToList(obj, httpInfo);
+        onDataGeted(listData, FRefresh);
+    }
+
     /**
      * 使用BasePresenter调用get或post之后，数据会回调在这里
      * @param requestUrl
      * @param info
      */
-    @Override
-    public  void onInfoGet(String requestUrl, Object info){
-        List<T> listData = convertInfoDataToList(requestUrl, info);
-        onDataGeted(listData, FRefresh);
-    }
+
 
 
 

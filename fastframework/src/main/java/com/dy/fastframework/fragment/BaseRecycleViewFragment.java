@@ -30,7 +30,13 @@ import yin.deng.refreshlibrary.refresh.listener.OnLoadmoreListener;
 import yin.deng.refreshlibrary.refresh.listener.OnRefreshListener;
 import yin.deng.superbase.fragment.ViewPagerSuperBaseFragment;
 
-public abstract class BaseRecycleViewFragment<T> extends ViewPagerSuperBaseFragment implements OnRefreshListener,
+/**
+ *
+ * @param <T>  列表数据（是list里面的数据）
+ * @param <V>  服务器返回数据（服务器返回的包含list的整体类）
+ *  注意：init里面要初始化initRecycle()/initAdapter()-----最后在需要的地方调用loadDataAtFirst()请求数据
+ */
+public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFragment implements OnRefreshListener,
         OnLoadmoreListener, MyHttpUtils.OnGetInfoListener, OnStatusChildClickListener {
     public List<T> mDatas=new ArrayList<>();
     public MyQuckAdapter<T> mAdapter;
@@ -145,11 +151,10 @@ public abstract class BaseRecycleViewFragment<T> extends ViewPagerSuperBaseFragm
 
     /**
      * 将获取到的数据转为list集合
-     * @param requestUrl
      * @param info
      * @return
      */
-    protected abstract List<T> convertInfoDataToList(String requestUrl, Object info);
+    protected abstract List<T> convertInfoDataToList(V obj, HttpInfo info);
 
     /**
      * 数据请求失败
@@ -261,16 +266,25 @@ public abstract class BaseRecycleViewFragment<T> extends ViewPagerSuperBaseFragm
     }
 
 
-    /**
-     * 使用BasePresenter调用get或post之后，数据会回调在这里
-     * @param requestUrl
-     * @param info
-     */
     @Override
-    public  void onInfoGet(String requestUrl, Object info){
-        List<T> listData = convertInfoDataToList(requestUrl, info);
+    public void onInfoGet(Object info, HttpInfo httpInfo) {
+        V obj= (V) info;
+        List<T> listData = convertInfoDataToList(obj, httpInfo);
         onDataGeted(listData, FRefresh);
     }
+
+    /**
+     * 使用BasePresenter调用get或post之后，数据会回调在这里
+     * @param
+     * @param info
+     */
+//    @Override
+//    public<V>  void onInfoGet(T info, HttpInfo httpInfo){
+//        List<T> listData = convertInfoDataToList(info, httpInfo);
+//        onDataGeted(listData, FRefresh);
+//    }
+
+
 
 
 

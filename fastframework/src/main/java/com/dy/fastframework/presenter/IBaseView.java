@@ -1,6 +1,9 @@
 package com.dy.fastframework.presenter;
 
+import com.okhttplib.HttpInfo;
+
 import yin.deng.dyrequestutils.http.MyHttpUtils;
 
-public interface IBaseView extends MyHttpUtils.OnGetInfoListener {
+public abstract class IBaseView<T> implements MyHttpUtils.OnGetInfoListener{
+
 }
