@@ -37,6 +37,8 @@ public class CommonMsgDialog extends Dialog {
         //       将属性设置给窗体
         dialogWindow.setAttributes(lp);
         holder = new ViewHolder(view);
+        holder.tvTitle.setText("系统消息");
+        holder.llProgress.setVisibility(View.GONE);
         holder.tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
