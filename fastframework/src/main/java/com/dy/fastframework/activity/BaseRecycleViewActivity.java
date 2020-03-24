@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.util.ActivityLoadUtil;
-import com.okhttplib.HttpInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import me.bakumon.statuslayoutmanager.library.OnStatusChildClickListener;
 import me.bakumon.statuslayoutmanager.library.StatusLayoutManager;
 import yin.deng.dyrequestutils.http.LogUtils;
 import yin.deng.dyrequestutils.http.MyHttpUtils;
+import yin.deng.dyrequestutils.okhttplib.HttpInfo;
 import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
 import yin.deng.refreshlibrary.refresh.api.RefreshLayout;
 import yin.deng.refreshlibrary.refresh.help.MyQuckAdapter;

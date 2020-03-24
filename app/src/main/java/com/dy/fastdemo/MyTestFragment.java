@@ -1,6 +1,5 @@
 package com.dy.fastdemo;
 
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,13 +9,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.fragment.BaseRecycleViewFragment;
 import com.dy.fastframework.presenter.BasePresenter;
-import com.okhttplib.HttpInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import yin.deng.dyrequestutils.http.BaseHttpInfo;
+import yin.deng.dyrequestutils.okhttplib.HttpInfo;
 import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.LogUtils;
