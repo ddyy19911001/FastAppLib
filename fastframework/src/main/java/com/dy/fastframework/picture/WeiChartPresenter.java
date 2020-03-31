@@ -20,7 +20,6 @@ import com.dy.fastframework.R;
 import com.ypx.imagepicker.ImagePicker;
 import com.ypx.imagepicker.adapter.PickerItemAdapter;
 import com.ypx.imagepicker.bean.ImageItem;
-import com.ypx.imagepicker.bean.PickConstants;
 import com.ypx.imagepicker.bean.selectconfig.BaseSelectConfig;
 import com.ypx.imagepicker.data.ICameraExecutor;
 import com.ypx.imagepicker.data.IReloadExecutor;
@@ -45,7 +44,9 @@ import yin.deng.superbase.activity.SuperBaseActivity;
 
 public class WeiChartPresenter implements IPickerPresenter, Serializable {
     Class targetActivity;
-    public WeiChartPresenter(Class activity) {
+    public boolean isChoosePicture;
+    public WeiChartPresenter(Class activity,boolean isChoosePicture) {
+        this.isChoosePicture=isChoosePicture;
         targetActivity=activity;
     }
 
@@ -95,7 +96,7 @@ public class WeiChartPresenter implements IPickerPresenter, Serializable {
             @Override
             public PickerFolderItemView getFolderItemView(Context context) {
                 WXFolderItemView itemView = new WXFolderItemView(context);
-                itemView.setIndicatorColor(context.getResources().getColor(R.color.wx));
+                itemView.setIndicatorColor(Color.parseColor("#303030"));
                 return itemView;
             }
 
@@ -151,26 +152,7 @@ public class WeiChartPresenter implements IPickerPresenter, Serializable {
         if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
             return false;
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(new WeakReference<>(activity).get());
-        builder.setMessage("是否放弃本次选择？");
-        builder.setPositiveButton(R.string.picker_str_sure,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        activity.finish();
-                    }
-                });
-        builder.setNegativeButton(R.string.picker_str_error,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        activity.finish();
         return true;
     }
 
@@ -190,26 +172,17 @@ public class WeiChartPresenter implements IPickerPresenter, Serializable {
         if (activity == null || activity.isDestroyed()) {
             return false;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setSingleChoiceItems(new String[]{"拍照", "录像"}, -1, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if (which == 0) {
-                    takePhoto.takePhoto();
-                } else {
-                    takePhoto.takeVideo();
-                }
-            }
-        });
-        builder.show();
+        if (isChoosePicture) {
+            takePhoto.takePhoto();
+        } else {
+            takePhoto.takeVideo();
+        }
         return true;
     }
 
 
-    @Override
-    public PickConstants getPickConstants(Context context) {
-        return new PickConstants(context);
-    }
+//    @Override
+//    public PickConstants getPickConstants(Context context) {
+//        return new PickConstants(context);
+//    }
 }

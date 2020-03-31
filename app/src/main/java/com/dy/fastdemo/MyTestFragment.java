@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.fragment.BaseRecycleViewFragment;
+import com.dy.fastframework.picture.PictureSelectUtil;
 import com.dy.fastframework.presenter.BasePresenter;
+import com.ypx.imagepicker.bean.ImageItem;
+import com.ypx.imagepicker.data.OnImagePickCompleteListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +22,7 @@ import yin.deng.dyrequestutils.okhttplib.HttpInfo;
 import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.LogUtils;
+import yin.deng.normalutils.utils.NoDoubleClickListener;
 import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
 
 public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> {
@@ -40,6 +44,17 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
             }
         });
         loadDataAtFirst();
+        rcView.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                PictureSelectUtil.chooseSiglePicNotCrop(getActivity(), 1, new OnImagePickCompleteListener() {
+                    @Override
+                    public void onImagePickComplete(ArrayList<ImageItem> items) {
+                        LogUtils.i("获取到图片："+items.get(0).getPath());
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -54,6 +69,12 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
         BasePresenter presenter=new BasePresenter(MyApp.app);
         HashMap<String,String> map=new HashMap<>();
         presenter.getUseDefaultHeader("http://yapi.fhkeji.net/mock/170/api/common/startup_ad",map,SplanshInfo.class,this);
+    }
+
+    @Override
+    public void onInfoGet(Object info, HttpInfo httpInfo) {
+        LogUtils.i("获取到了数据：httpHeaders="+httpInfo.getResponseHeaders());
+       super.onInfoGet(info, httpInfo);
     }
 
     @Override

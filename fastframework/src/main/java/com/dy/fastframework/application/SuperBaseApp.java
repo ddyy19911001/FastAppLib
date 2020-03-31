@@ -94,5 +94,19 @@ public abstract class SuperBaseApp extends Application {
         LogUtils.allowE= isDebug;
         LogUtils.allowI= isDebug;
         LogUtils.allowW= isDebug;
+
+        yin.deng.normalutils.utils.LogUtils.allowV= isDebug;
+        yin.deng.normalutils.utils.LogUtils.allowD= isDebug;
+        yin.deng.normalutils.utils.LogUtils.allowE= isDebug;
+        yin.deng.normalutils.utils.LogUtils.allowI= isDebug;
+        yin.deng.normalutils.utils.LogUtils.allowW= isDebug;
+
+        yin.deng.superbase.activity.LogUtils.allowV= isDebug;
+        yin.deng.superbase.activity.LogUtils.allowD= isDebug;
+        yin.deng.superbase.activity.LogUtils.allowE= isDebug;
+        yin.deng.superbase.activity.LogUtils.allowI= isDebug;
+        yin.deng.superbase.activity.LogUtils.allowW= isDebug;
+
+        me.jessyan.autosize.utils.LogUtils.setDebug(isDebug);
     }
 }

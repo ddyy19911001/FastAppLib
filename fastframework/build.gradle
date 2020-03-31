@@ -38,7 +38,7 @@ dependencies {
     //左右滑动的布局
     api 'com.github.ddyy19911001:DyTabLayout:1.0.3'
     //图片选择库
-    api 'com.ypx.yimagepicker:androidx:3.0.1'
+    api 'com.ypx.yimagepicker:androidx:3.1.2'
     //Glide图片显示器
     api 'com.github.bumptech.glide:glide:4.10.0'
     api 'com.google.code.gson:gson:2.8.5'
