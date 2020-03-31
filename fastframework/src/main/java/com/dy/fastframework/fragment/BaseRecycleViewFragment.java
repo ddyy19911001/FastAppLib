@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.util.ActivityLoadUtil;
+import com.dy.fastframework.util.ImageAutoLoadScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,10 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     public View footView;
     public Context mContext;
     public StatusLayoutManager statusLayoutManager;
+    public int finishLoadMoreDelay=100;
+    public int finishRefreshDelay=250;
+    public int finishEdLoadMoreShowDelay=0;
+
 
     /**
      * 使用方法：1.initRecycle  2.initAdapter(是否设置default page)  3.sendMsgToGetData  4.onAdapterSetOver
@@ -179,12 +184,29 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     /**
      * 设置刷新或加载更多的监听
      */
-    private void setRefreshLoadMoreListener() {
+    public void setRefreshLoadMoreListener() {
         if(refreshLayout!=null){
             refreshLayout.setOnRefreshListener(this);
             refreshLayout.setOnLoadmoreListener(this);
             setLoadingLayout(refreshLayout);
         }
+        onInitOver();
+        if(isNeedNotLoadImgOnScroll()){
+            mRecycleView.setOnScrollListener(new ImageAutoLoadScrollListener(getContext()));
+        }
+    }
+
+
+    /**
+     * 是否在滑动过程中不加载图片
+     * @return
+     */
+    public boolean isNeedNotLoadImgOnScroll(){
+        return true;
+    }
+
+    public void onInitOver(){
+
     }
 
     /**
@@ -306,21 +328,21 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         if(FRefresh){
             //刷新完成
             if(refreshLayout!=null){
-                refreshLayout.finishRefresh();
+                refreshLayout.finishRefresh(finishRefreshDelay,true);
             }
             mDatas.clear();
         }else{
-            //加载更多完成
-            if(refreshLayout!=null){
-                refreshLayout.finishLoadmore();
-            }
-        }
-        if(list.size()==0){
-            if(!FRefresh){
+            if(list.size()==0){
                 refreshLayout.setLoadmoreFinished(true);
+                refreshLayout.finishLoadmore(finishEdLoadMoreShowDelay,true);
                 page--;
                 if(page<=defaultPage){
                     page=defaultPage;
+                }
+            }else {
+                //加载更多完成
+                if (refreshLayout != null) {
+                    refreshLayout.finishLoadmore(finishLoadMoreDelay, true);
                 }
             }
         }
