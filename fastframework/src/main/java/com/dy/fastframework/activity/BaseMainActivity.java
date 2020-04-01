@@ -135,6 +135,8 @@ public abstract class BaseMainActivity extends SuperBaseActivity {
         normalTextColor=getNormalTextColor();
         selectedTextColor=getSelectedTextColor();
         initTabs();
+        if(mFragmentLists!=null&&mFragmentLists.size()>0)
+        mViewPager.setOffscreenPageLimit(mFragmentLists.size());
     }
 
 
