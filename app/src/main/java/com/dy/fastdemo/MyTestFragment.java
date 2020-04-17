@@ -68,8 +68,7 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
     public void sendMsgToGetData(MyCallBackInterface<SplanshInfo> callBackImp) {
         ViseHttp.GET("mock/170/api/common/startup_ad")
                 .baseUrl("http://yapi.fhkeji.net/")
-                .request(new MyCallBackListener<SplanshInfo>(callBackImp) {
-                });
+                .request(new MyCallBackListener<SplanshInfo>(callBackImp){});
     }
 
     @Override
