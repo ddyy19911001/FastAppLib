@@ -45,9 +45,9 @@ public class TabTestActivity extends BaseTabViewActivity implements ServiceConne
     public void initFirst() {
         initPageItem();
         intent=new Intent();
-        intent.setClass(mActivity, NotifyService.class);
-        startService(intent);
-        bindService(intent, this,BIND_AUTO_CREATE);
+//        intent.setClass(mActivity, NotifyService.class);
+//        startService(intent);
+//        bindService(intent, this,BIND_AUTO_CREATE);
     }
 
     @Override

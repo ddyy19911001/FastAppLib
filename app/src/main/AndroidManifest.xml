@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.dy.fastframework.service.NotifyService"/>
+<!--        <service android:name="com.dy.fastframework.service.NotifyService"/>-->
     </application>
 
 </manifest>

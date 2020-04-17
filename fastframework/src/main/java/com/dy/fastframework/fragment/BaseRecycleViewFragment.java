@@ -1,9 +1,6 @@
 package com.dy.fastframework.fragment;
 
-import android.app.Activity;
-import android.app.StatusBarManager;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,8 +11,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.util.ActivityLoadUtil;
 import com.dy.fastframework.util.ImageAutoLoadScrollListener;
-import com.vise.xsnow.base.MyCallBackBind;
-import com.vise.xsnow.base.MyCallBackImp;
+import com.vise.xsnow.base.MyCallBackInterface;
+import com.vise.xsnow.base.MyCallBackInterface;
+import com.vise.xsnow.base.MyCallBackInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +54,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     public int finishLoadMoreDelay=100;
     public int finishRefreshDelay=250;
     public int finishEdLoadMoreShowDelay=0;
+    public MyCallBackInterface<V> mainHttpCallBack;
 
 
     /**
@@ -106,18 +105,21 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         this.onConvertDataLayoutListener=listener;
     }
 
-    public  MyCallBackImp<V> setHttpCallBack(){
-        return new MyCallBackImp<V>() {
-            @Override
-            public void onRequestSuccess(V data) {
-                onGetSuccess(data);
-            }
+    public MyCallBackInterface<V> setHttpCallBack(){
+        if(mainHttpCallBack==null) {
+            mainHttpCallBack = new MyCallBackInterface<V>() {
+                @Override
+                public void onRequestSuccess(V data) {
+                    onGetSuccess(data);
+                }
 
-            @Override
-            public void onRequestFail(int errCode, String errMsg) {
-                onGetFail(errCode, errMsg);
-            }
-        };
+                @Override
+                public void onRequestFail(int errCode, String errMsg) {
+                    onGetFail(errCode, errMsg);
+                }
+            };
+        }
+        return mainHttpCallBack;
     }
 
 
@@ -158,7 +160,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
      * 本地数据：
      * 只需调用showLocalDataList()传入要加载的list集合即可。
      */
-    public abstract void sendMsgToGetData(MyCallBackImp<V> callBackImp);
+    public abstract void sendMsgToGetData(MyCallBackInterface<V> callBackImp);
 
     /**
      * 如果只需要显示本地数据，则在sendMsgToGetData方法中调用showLocalDataList即可
@@ -253,7 +255,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     /**
      * 首次加载数据时调用此方法
      */
-    public void loadDataAtFirst(){
+    public void getDataAtFirst(){
         mDatas.clear();
         page=defaultPage;
         FRefresh=true;
@@ -319,6 +321,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         if(list==null){
             list=new ArrayList<T>();
         }
+        LogUtils.i("数据获取成功："+list.size()+"个");
         if(FRefresh){
             //刷新完成
             if(refreshLayout!=null){
@@ -403,7 +406,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
      */
     @Override
     public void onEmptyChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 
     /**
@@ -413,7 +416,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
      */
     @Override
     public void onErrorChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 
     /**
@@ -423,6 +426,6 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
      */
     @Override
     public void onCustomerChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 }

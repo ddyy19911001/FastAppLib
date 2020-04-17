@@ -1,10 +1,6 @@
 package com.dy.fastframework.activity;
 
-import android.app.ActionBar;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.util.ActivityLoadUtil;
 import com.dy.fastframework.util.ImageAutoLoadScrollListener;
-import com.vise.xsnow.base.MyCallBackImp;
+import com.vise.xsnow.base.MyCallBackInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +49,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     public int finishLoadMoreDelay=100;
     public int finishRefreshDelay=250;
     public int finishEdLoadMoreShowDelay=0;
+    public MyCallBackInterface<V> mainHttpCallBack;
 
     /**
      * 使用方法：1.initRecycle  2.initAdapter(是否设置default page)  3.sendMsgToGetData  4.onAdapterSetOver
@@ -107,18 +104,21 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     }
 
 
-    public  MyCallBackImp<V> setHttpCallBack(){
-        return new MyCallBackImp<V>() {
-            @Override
-            public void onRequestSuccess(V data) {
-                onGetSuccess(data);
-            }
+    public  MyCallBackInterface<V> setHttpCallBack(){
+        if(mainHttpCallBack==null) {
+            mainHttpCallBack = new MyCallBackInterface<V>() {
+                @Override
+                public void onRequestSuccess(V data) {
+                    onGetSuccess(data);
+                }
 
-            @Override
-            public void onRequestFail(int errCode, String errMsg) {
-                onGetFail(errCode, errMsg);
-            }
-        };
+                @Override
+                public void onRequestFail(int errCode, String errMsg) {
+                    onGetFail(errCode, errMsg);
+                }
+            };
+        }
+        return mainHttpCallBack;
     }
 
     @Override
@@ -160,7 +160,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
      * 本地数据：
      * 只需调用showLocalDataList()传入要加载的list集合即可。
      */
-    public abstract void sendMsgToGetData(MyCallBackImp<V> callBackImp);
+    public abstract void sendMsgToGetData(MyCallBackInterface<V> callBackImp);
 
     /**
      * 如果只需要显示本地数据，则在sendMsgToGetData方法中调用showLocalDataList即可
@@ -254,7 +254,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     /**
      * 首次加载数据时调用此方法
      */
-    public void loadDataAtFirst(){
+    public void getDataAtFirst(){
         mDatas.clear();
         page=defaultPage;
         FRefresh=true;
@@ -410,7 +410,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
      */
     @Override
     public void onEmptyChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 
     /**
@@ -420,7 +420,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
      */
     @Override
     public void onErrorChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 
     /**
@@ -430,6 +430,6 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
      */
     @Override
     public void onCustomerChildClick(View view){
-        loadDataAtFirst();
+        getDataAtFirst();
     }
 }
