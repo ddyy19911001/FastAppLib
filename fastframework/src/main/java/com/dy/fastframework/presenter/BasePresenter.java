@@ -5,168 +5,219 @@ import android.os.Environment;
 
 
 import com.google.gson.JsonObject;
+import com.vise.xsnow.base.MyCallBackBind;
+import com.vise.xsnow.http.ViseHttp;
+import com.vise.xsnow.http.mode.HttpHeaders;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import yin.deng.dyrequestutils.http.FileListParams;
-import yin.deng.dyrequestutils.http.HeaderParam;
-import yin.deng.dyrequestutils.http.MyHttpUtils;
-
 /**
  * 使用方法：
  */
 public class BasePresenter {
-    public MyHttpUtils httpUtils;
-    public List<HeaderParam> headers=new ArrayList<>();
-    public String logTag="DYLOG";
-    public String downloadFileDir;
-    public String cacheDir;
-    public BasePresenter(Application app) {
-        initHttpUtils(app,15);
-    }
-
-    public MyHttpUtils.OnNoNetRequestListener noNetRequestListener=new MyHttpUtils.OnNoNetRequestListener() {
-        @Override
-        public void onNoNet(String requestUrl) {
-            onRequestNoNet(requestUrl);
-        }
-    };
 
 
     /**
-     * 没用网络时会执行这句话，可重写
-     * @param requestUrl
+     * get请求使用hashmap作为参数
+     * @param path
+     * @param params
+     * @param callBackBind
+     * @param <T>
      */
-    public void onRequestNoNet(String requestUrl){
+    public static <T>void requestGet(String path, HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+       ViseHttp.GET(path)
+               .tag(callBackBind)
+               .addParams(params)
+               .request(callBackBind);
+   }
 
+    public static <T>void requestGetWithBaseUrl(String baseUrl,String path, HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.GET(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .addParams(params)
+                .request(callBackBind);
     }
+
+    public static <T>void requestGetWithHeaders(String path,HttpHeaders headers,HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.GET(path)
+                .tag(callBackBind)
+                .headers(headers)
+                .addParams(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestGetWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers,HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.GET(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .addParams(params)
+                .request(callBackBind);
+    }
+
 
     /**
-     * 初始化请求工具
-     * 可以重写此方法自行配置httpUtils
-     * @param app
+     * post请求使用hashmap作为参数
+     * @param path
+     * @param params
+     * @param callBackBind
+     * @param <T>
      */
-    public void initHttpUtils(Application app,int timeOutSeconds) {
-         downloadFileDir=downloadFileDir==null?Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_download/":downloadFileDir;
-         cacheDir=cacheDir==null?Environment.getExternalStorageDirectory().getPath()+"/my_okHttp_cache":cacheDir;
-         httpUtils = new MyHttpUtils(app, timeOutSeconds, true, logTag, downloadFileDir, cacheDir);
-         httpUtils.setNoNetRequestListener(noNetRequestListener);
+    public static <T>void requestPost(String path, HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .addParams(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithBaseUrl(String baseUrl,String path, HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .addParams(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeaders(String path,HttpHeaders headers,HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .headers(headers)
+                .addParams(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers,HashMap<String,String> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .addParams(params)
+                .request(callBackBind);
     }
 
 
     /**
-     * 自定义全局请求头
-     * 注意：此方法只适用于继承此类后使用过此方法的类
-     * @param headers
+     * Post请求可以传入json字符串作为参数
+     * @param path
+     * @param params
+     * @param callBackBind
+     * @param <T>
      */
-    public void setCustomerHeader(List<HeaderParam> headers){
-        this.headers=headers;
+    public static <T>void requestPost(String path, String params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .setJson(params)
+                .request(callBackBind);
     }
+
+    public static <T>void requestPostWithBaseUrl(String baseUrl,String path, String params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .setJson(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeaders(String path,HttpHeaders headers, String params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .headers(headers)
+                .setJson(params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers, String params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .setJson(params)
+                .request(callBackBind);
+    }
+
 
     /**
-     * 此方法在每次请求时都会被调用
-     * 可在此处设置不同的headers
+     * Post请求可以传入表单数据作为参数
+     * @param path
+     * @param params
+     * @param callBackBind
+     * @param <T>
      */
-    public void beforeMsgSend(String requestUrl) {
-
+    public static <T>void requestPost(String path, String key,Object params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .addForm(key,params)
+                .request(callBackBind);
     }
+
+    public static <T>void requestPostWithBaseUrl(String baseUrl,String path, String key,Object params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .addForm(key,params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeaders(String path,HttpHeaders headers, String key,Object params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .headers(headers)
+                .addForm(key,params)
+                .request(callBackBind);
+    }
+
+    public static <T>void requestPostWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers, String key,Object params, MyCallBackBind<T> callBackBind){
+        ViseHttp.POST(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .addForm(key,params)
+                .request(callBackBind);
+    }
+
 
     /**
-     * 使用默认的请求头进行请求
-     * 可能没有设置token
-     * @param requestUrl
-     * @param jsonObject
-     * @param convertClass
+     * 上传文件
+     * @param path
+     * @param params
+     * @param callBackBind
+     * @param <T>
      */
-    public  void getUseDefaultHeader(String requestUrl, JsonObject jsonObject, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
+    public static <T>void uploadRequest(String path, HashMap<String,File> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.UPLOAD(path)
+                .tag(callBackBind)
+                .addFiles(params)
+                .request(callBackBind);
     }
 
-    public  void getUseDefaultHeader(String requestUrl, HashMap<String,String> jsonObject, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.sendMsgGet(requestUrl,jsonObject,convertClass,listener);
+    public static <T>void uploadRequestWithBaseUrl(String baseUrl,String path, HashMap<String,File> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.UPLOAD(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .addFiles(params)
+                .request(callBackBind);
     }
 
-    /**
-     * 使用自定义的请求头进行请求
-     * @param requestUrl
-     * @param jsonObject
-     * @param convertClass
-     */
-    public  void getUseCustomerHeader(String requestUrl, JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0){
-            getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
-        }else {
-            httpUtils.sendMsgGet( requestUrl, headers, jsonObject, convertClass, listener);
-        }
+    public static <T>void uploadRequestWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers, HashMap<String,File> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.UPLOAD(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .addFiles(params)
+                .request(callBackBind);
     }
 
-
-
-    public  void getUseCustomerHeader(String requestUrl, HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0){
-            getUseDefaultHeader(requestUrl, jsonObject, convertClass,listener);
-        }else {
-            httpUtils.sendMsgGet( requestUrl, headers, jsonObject, convertClass, listener);
-        }
-    }
-
-
-
-    public void postUseDefaultHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
-    }
-
-    public void postUseDefaultHeader(String requestUrl,HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.sendMsgPost(requestUrl,jsonObject,convertClass,listener);
-    }
-
-    public void postUseCustomerHeader(String requestUrl,JsonObject jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0) {
-            httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
-        }else{
-            httpUtils.sendMsgPost(requestUrl,headers,jsonObject,convertClass,listener);
-        }
-    }
-
-    public void postUseCustomerHeader(String requestUrl,HashMap<String,String> jsonObject,Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0) {
-            httpUtils.sendMsgPost( requestUrl, jsonObject, convertClass, listener);
-        }else{
-            httpUtils.sendMsgPost(requestUrl,headers,jsonObject,convertClass,listener);
-        }
-    }
-
-    public void uploadUseDefaultHeader(String requestUrl, String fileName, File file, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.doUploadSingleFile(requestUrl, fileName,file , convertClass,listener);
-    }
-
-    public void uploadUseCustomerHeader(String requestUrl, String fileName, File file, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0) {
-            httpUtils.doUploadSingleFile( requestUrl, fileName, file, convertClass, listener);
-        }else{
-            httpUtils.doUploadSingleFile( requestUrl, headers,fileName, file, convertClass, listener);
-        }
-    }
-
-    public void uploadMuiltDefaultHeader(String requestUrl, FileListParams fileListParams, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
-    }
-
-    public void uploadMuiltUseCustomerHeader(String requestUrl,  FileListParams fileListParams, Class convertClass, MyHttpUtils.OnGetInfoListener listener){
-        beforeMsgSend(requestUrl);
-        if(headers.size()==0) {
-            httpUtils.doUploadMuiltFiles(requestUrl, fileListParams , convertClass,listener);
-        }else{
-            httpUtils.doUploadMuiltFiles( requestUrl, headers,fileListParams, convertClass, listener);
-        }
+    public static <T>void downLoadRequestWithHeadersAndBaseUrl(String baseUrl,String path,HttpHeaders headers, HashMap<String,File> params, MyCallBackBind<T> callBackBind){
+        ViseHttp.UPLOAD(path)
+                .tag(callBackBind)
+                .baseUrl(baseUrl)
+                .headers(headers)
+                .addFiles(params)
+                .request(callBackBind);
     }
 
 }

@@ -14,15 +14,15 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.util.ActivityLoadUtil;
 import com.dy.fastframework.util.ImageAutoLoadScrollListener;
+import com.vise.xsnow.base.MyCallBackBind;
+import com.vise.xsnow.base.MyCallBackImp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.bakumon.statuslayoutmanager.library.OnStatusChildClickListener;
 import me.bakumon.statuslayoutmanager.library.StatusLayoutManager;
-import yin.deng.dyrequestutils.http.LogUtils;
-import yin.deng.dyrequestutils.http.MyHttpUtils;
-import yin.deng.dyrequestutils.okhttplib.HttpInfo;
+import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
 import yin.deng.refreshlibrary.refresh.api.RefreshLayout;
 import yin.deng.refreshlibrary.refresh.help.MyQuckAdapter;
@@ -37,7 +37,7 @@ import yin.deng.superbase.fragment.ViewPagerSuperBaseFragment;
  *  注意：init里面要初始化initRecycle()/initAdapter()-----最后在需要的地方调用loadDataAtFirst()请求数据
  */
 public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFragment implements OnRefreshListener,
-        OnLoadmoreListener, MyHttpUtils.OnGetInfoListener, OnStatusChildClickListener {
+        OnLoadmoreListener, OnStatusChildClickListener {
     public List<T> mDatas=new ArrayList<>();
     public MyQuckAdapter<T> mAdapter;
     public RecyclerView mRecycleView;
@@ -106,6 +106,20 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         this.onConvertDataLayoutListener=listener;
     }
 
+    public  MyCallBackImp<V> setHttpCallBack(){
+        return new MyCallBackImp<V>() {
+            @Override
+            public void onRequestSuccess(V data) {
+                onGetSuccess(data);
+            }
+
+            @Override
+            public void onRequestFail(int errCode, String errMsg) {
+                onGetFail(errCode, errMsg);
+            }
+        };
+    }
+
 
     @Override
     public abstract int setContentView();
@@ -144,7 +158,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
      * 本地数据：
      * 只需调用showLocalDataList()传入要加载的list集合即可。
      */
-    public abstract void sendMsgToGetData();
+    public abstract void sendMsgToGetData(MyCallBackImp<V> callBackImp);
 
     /**
      * 如果只需要显示本地数据，则在sendMsgToGetData方法中调用showLocalDataList即可
@@ -155,17 +169,14 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
 
     /**
      * 将获取到的数据转为list集合
-     * @param info
      * @return
      */
-    protected abstract List<T> convertInfoDataToList(V obj, HttpInfo info);
+    public abstract List<T> convertInfoDataToList(V obj);
 
     /**
      * 数据请求失败
-     * @param requestUrl
-     * @param info
      */
-    protected abstract void onDataGetFialed(String requestUrl, HttpInfo info);
+    public abstract void onDataGetFialed(int errcode, String errMsg);
 
 
 
@@ -204,6 +215,8 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     public boolean isNeedNotLoadImgOnScroll(){
         return true;
     }
+
+
 
     public void onInitOver(){
 
@@ -246,7 +259,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         FRefresh=true;
         //当出现刷新转圈的时候回调
         LogUtils.i("刷新数据");
-        sendMsgToGetData();
+        sendMsgToGetData(setHttpCallBack());
     }
 
     @Override
@@ -255,7 +268,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         FRefresh=true;
         //当出现刷新转圈的时候回调
         LogUtils.i("刷新数据");
-        sendMsgToGetData();
+        sendMsgToGetData(setHttpCallBack());
     }
 
     @Override
@@ -264,7 +277,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
         FRefresh=false;
         //当出现加载更多的时候回调
         LogUtils.i("加载更多数据");
-        sendMsgToGetData();
+        sendMsgToGetData(setHttpCallBack());
     }
 
 
@@ -287,33 +300,14 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
     }
 
 
-    @Override
-    public void onInfoGet(Object info, HttpInfo httpInfo) {
-        V obj= (V) info;
-        List<T> listData = convertInfoDataToList(obj, httpInfo);
+     public void onGetSuccess(V data){
+        List<T> listData = convertInfoDataToList(data);
         onDataGeted(listData, FRefresh);
-    }
+     }
 
-    /**
-     * 使用BasePresenter调用get或post之后，数据会回调在这里
-     * @param
-     * @param info
-     */
-//    @Override
-//    public<V>  void onInfoGet(T info, HttpInfo httpInfo){
-//        List<T> listData = convertInfoDataToList(info, httpInfo);
-//        onDataGeted(listData, FRefresh);
-//    }
-
-
-
-
-
-
-    @Override
-    public  void onFailed(String requestUrl, HttpInfo info){
-        onDataGetFialed(requestUrl,info);
-    }
+    public void onGetFail(int errCode, String errMsg){
+         onDataGetFialed(errCode,errMsg);
+     }
 
 
 
@@ -397,9 +391,7 @@ public abstract class BaseRecycleViewFragment<T,V> extends ViewPagerSuperBaseFra
 
     }
 
-    public interface OnConvertDataLayoutListener<T>{
-        void onConvert(BaseViewHolder holder, T item);
-    }
+
 
 
 

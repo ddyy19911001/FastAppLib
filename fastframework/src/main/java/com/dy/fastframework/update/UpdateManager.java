@@ -26,7 +26,7 @@ import com.dy.fastframework.view.CommonProgressDialog;
 import java.io.File;
 import java.util.List;
 
-import yin.deng.dyrequestutils.http.LogUtils;
+import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.normalutils.utils.MyUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
 import yin.deng.superbase.activity.SuperBaseActivity;

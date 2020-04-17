@@ -10,6 +10,8 @@ import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.fragment.BaseRecycleViewFragment;
 import com.dy.fastframework.picture.PictureSelectUtil;
 import com.dy.fastframework.presenter.BasePresenter;
+import com.vise.xsnow.base.MyCallBackBind;
+import com.vise.xsnow.base.MyCallBackImp;
 import com.ypx.imagepicker.bean.ImageItem;
 import com.ypx.imagepicker.data.OnImagePickCompleteListener;
 
@@ -17,9 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import yin.deng.dyrequestutils.http.BaseHttpInfo;
-import yin.deng.dyrequestutils.okhttplib.HttpInfo;
-import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
@@ -35,7 +34,7 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
     }
 
     @Override
-    protected void init() {
+    public void init() {
         initVerticalRecycleView(rcView, smRf);
         initAdapter(R.layout.test_item, new BaseRecycleViewActivity.OnConvertDataLayoutListener<String>() {
             @Override
@@ -43,7 +42,6 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
                 holder.setText(R.id.tv, item);
             }
         });
-        loadDataAtFirst();
         rcView.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
@@ -58,6 +56,11 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
     }
 
     @Override
+    public void loadDataFirst() {
+        loadDataAtFirst();
+    }
+
+    @Override
     public void bindViewWithId(View view) {
         smRf = (SmartRefreshLayout)view. findViewById(R.id.smRf);
         rcView = (RecyclerView) view.findViewById(R.id.rcView);
@@ -65,31 +68,31 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
     }
 
     @Override
-    public void sendMsgToGetData() {
-        BasePresenter presenter=new BasePresenter(MyApp.app);
-        HashMap<String,String> map=new HashMap<>();
-        presenter.getUseDefaultHeader("http://yapi.fhkeji.net/mock/170/api/common/startup_ad",map,SplanshInfo.class,this);
+    public void sendMsgToGetData(MyCallBackImp<SplanshInfo> callBackImp) {
+        BasePresenter.requestGetWithBaseUrl("http://yapi.fhkeji.net/",
+                "mock/170/api/common/startup_ad",
+                null, new MyCallBackBind<SplanshInfo>(setHttpCallBack()){});
     }
 
     @Override
-    public void onInfoGet(Object info, HttpInfo httpInfo) {
-        LogUtils.i("获取到了数据：httpHeaders="+httpInfo.getResponseHeaders());
-       super.onInfoGet(info, httpInfo);
-    }
-
-    @Override
-    protected List<String> convertInfoDataToList(SplanshInfo obj, HttpInfo info) {
+    public List<String> convertInfoDataToList(SplanshInfo obj) {
         List<String> strings=new ArrayList<>();
         strings.add("我是aaaa");
         strings.add("sdhjahjdf");
         return strings;
     }
 
-
-
-
     @Override
-    protected void onDataGetFialed(String requestUrl, HttpInfo info) {
-
+    public void onDataGetFialed(int errcode, String errMsg) {
+        LogUtils.i("数据获取失败，错误原因:"+errMsg);
     }
+
+
+
+
+
+
+
+
+
 }

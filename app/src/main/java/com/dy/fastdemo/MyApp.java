@@ -11,6 +11,11 @@ public class MyApp extends SuperBaseApp {
     }
 
     @Override
+    protected String setBaseUrl() {
+        return "http://www.baidu.com/";
+    }
+
+    @Override
     public boolean isEnableDebugLog() {
         return true;
     }

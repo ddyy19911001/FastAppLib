@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.dy.fastdemo.TestPullAc"
+        <activity android:name="com.dy.fastdemo.TabTestActivity"
             android:configChanges="orientation|screenSize"
             >
             <intent-filter>

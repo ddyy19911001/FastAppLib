@@ -1,8 +1,8 @@
 package com.dy.fastframework.presenter;
 
 
-import yin.deng.dyrequestutils.http.MyHttpUtils;
+import com.vise.xsnow.base.MyCallBackImp;
 
-public abstract class IBaseView<T> implements MyHttpUtils.OnGetInfoListener{
+public abstract class IBaseView<T> implements MyCallBackImp<T> {
 
 }

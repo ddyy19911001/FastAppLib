@@ -6,13 +6,5 @@
     android:layout_height="match_parent"
     >
 
-   <TextView
-       android:id="@+id/tv_open"
-       android:onClick="open"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-      android:text="wossss"
-      android:gravity="center"
-      ></TextView>
-
+  <include layout="@layout/smart_layout_rc"/>
 </LinearLayout>

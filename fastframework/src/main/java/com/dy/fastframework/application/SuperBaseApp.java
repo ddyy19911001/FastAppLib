@@ -7,8 +7,8 @@ import android.content.Context;
 import com.dy.fastframework.BuildConfig;
 import com.dy.fastframework.R;
 import com.dy.fastframework.erro.CrashHandler;
+import com.vise.xsnow.http.ViseHttp;
 
-import yin.deng.dyrequestutils.http.LogUtils;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.SharedPreferenceUtil;
 import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
@@ -27,6 +27,7 @@ public abstract class SuperBaseApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashHandler.getInstance().init(this);
         app=this;
         initDebugMode(isEnableDebugLog());
         if(isEnableDebugLog()){
@@ -34,10 +35,17 @@ public abstract class SuperBaseApp extends Application {
         }
         initImgLoadSetting();
         initRefreshHeadAndFooter();
-        CrashHandler.getInstance().init(this);
+        //初始化请求工具
+        ViseHttp.init(this,setBaseUrl());
         util=new SharedPreferenceUtil(this, getApplicationInfo().packageName);
     }
 
+
+    /**
+     * 设置服务器请求主机地址
+     * @return
+     */
+    protected abstract String setBaseUrl();
 
 
     /**
@@ -89,12 +97,6 @@ public abstract class SuperBaseApp extends Application {
      * 设置日志打印，在正式环境中不显示
      */
     public void initDebugMode(boolean isDebug) {
-        LogUtils.allowV= isDebug;
-        LogUtils.allowD= isDebug;
-        LogUtils.allowE= isDebug;
-        LogUtils.allowI= isDebug;
-        LogUtils.allowW= isDebug;
-
         yin.deng.normalutils.utils.LogUtils.allowV= isDebug;
         yin.deng.normalutils.utils.LogUtils.allowD= isDebug;
         yin.deng.normalutils.utils.LogUtils.allowE= isDebug;
