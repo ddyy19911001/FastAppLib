@@ -33,7 +33,7 @@ dependencies {
 //    api 'com.github.ddyy19911001:RequestUtils:1.3'
     api 'com.github.ddyy19911001:RxRequestUtils:1.5'
     api 'com.github.ddyy19911001:smartRefreshWithAdapter:1.0.1'
-    api 'com.github.ddyy19911001:DyNormalUtils:1.0.8'
+    api 'com.github.ddyy19911001:DyNormalUtils:1.0.9'
     //加载状态布局
     api 'com.github.Bakumon:StatusLayoutManager:1.0.4'
     //左右滑动的布局

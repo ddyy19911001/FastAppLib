@@ -17,6 +17,7 @@ import com.ypx.imagepicker.data.OnImagePickCompleteListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import yin.deng.normalutils.utils.DataHolder;
 import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
 import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
