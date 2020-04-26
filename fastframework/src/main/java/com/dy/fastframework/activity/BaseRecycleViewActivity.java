@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dy.fastframework.util.ActivityLoadUtil;
 import com.dy.fastframework.util.ImageAutoLoadScrollListener;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.help.MyQuckAdapter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +27,6 @@ import me.bakumon.statuslayoutmanager.library.StatusLayoutManager;
 import yin.deng.dyrequestutils.http.LogUtils;
 import yin.deng.dyrequestutils.http.MyHttpUtils;
 import yin.deng.dyrequestutils.okhttplib.HttpInfo;
-import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
-import yin.deng.refreshlibrary.refresh.api.RefreshLayout;
-import yin.deng.refreshlibrary.refresh.help.MyQuckAdapter;
-import yin.deng.refreshlibrary.refresh.listener.OnLoadmoreListener;
-import yin.deng.refreshlibrary.refresh.listener.OnRefreshListener;
 import yin.deng.superbase.activity.SuperBaseActivity;
 
 /**
@@ -36,7 +36,7 @@ import yin.deng.superbase.activity.SuperBaseActivity;
  * 注意：init里面要初始化initRecycle()/initAdapter()-----最后在需要的地方调用loadDataAtFirst()请求数据
  */
 public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity implements
-        OnRefreshListener, OnLoadmoreListener, MyHttpUtils.OnGetInfoListener, OnStatusChildClickListener {
+        OnRefreshListener, OnLoadMoreListener, MyHttpUtils.OnGetInfoListener, OnStatusChildClickListener {
     public List<T> mDatas=new ArrayList<>();
     public MyQuckAdapter<T> mAdapter;
     public RecyclerView mRecycleView;
@@ -51,9 +51,6 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     public View headView;
     public View footView;
     public StatusLayoutManager statusLayoutManager;
-    public int finishLoadMoreDelay=100;
-    public int finishRefreshDelay=250;
-    public int finishEdLoadMoreShowDelay=0;
 
     /**
      * 使用方法：1.initRecycle  2.initAdapter(是否设置default page)  3.sendMsgToGetData  4.onAdapterSetOver
@@ -191,7 +188,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     public void setRefreshLoadMoreListener() {
         if(refreshLayout!=null){
             refreshLayout.setOnRefreshListener(this);
-            refreshLayout.setOnLoadmoreListener(this);
+            refreshLayout.setOnLoadMoreListener(this);
             setLoadingLayout(refreshLayout);
         }
         onInitOver();
@@ -264,7 +261,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
     }
 
     @Override
-    public void onLoadmore(RefreshLayout refreshlayout) {
+    public void onLoadMore(RefreshLayout refreshlayout) {
         page++;
         FRefresh=false;
         //当出现加载更多的时候回调
@@ -327,13 +324,12 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
         if(FRefresh){
             //刷新完成
             if(refreshLayout!=null){
-                refreshLayout.finishRefresh(finishRefreshDelay,true);
+                refreshLayout.finishRefresh(true);
             }
             mDatas.clear();
         }else{
             if(list.size()==0){
-                refreshLayout.setLoadmoreFinished(true);
-                refreshLayout.finishLoadmore(finishEdLoadMoreShowDelay,true);
+                refreshLayout.finishLoadMoreWithNoMoreData();
                 page--;
                 if(page<=defaultPage){
                     page=defaultPage;
@@ -341,7 +337,7 @@ public abstract class BaseRecycleViewActivity<T,V> extends SuperBaseActivity imp
             }else {
                 //加载更多完成
                 if (refreshLayout != null) {
-                    refreshLayout.finishLoadmore(finishLoadMoreDelay, true);
+                    refreshLayout.finishLoadMore( true);
                 }
             }
         }

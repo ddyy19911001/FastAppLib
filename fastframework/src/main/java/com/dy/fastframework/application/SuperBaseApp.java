@@ -7,18 +7,18 @@ import android.content.Context;
 import com.dy.fastframework.BuildConfig;
 import com.dy.fastframework.R;
 import com.dy.fastframework.erro.CrashHandler;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.viewimpl.MyFooterView;
+import com.scwang.smartrefresh.layout.viewimpl.MyHeaderView;
 
 import yin.deng.dyrequestutils.http.LogUtils;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.SharedPreferenceUtil;
-import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
-import yin.deng.refreshlibrary.refresh.api.DefaultRefreshFooterCreater;
-import yin.deng.refreshlibrary.refresh.api.DefaultRefreshHeaderCreater;
-import yin.deng.refreshlibrary.refresh.api.RefreshFooter;
-import yin.deng.refreshlibrary.refresh.api.RefreshHeader;
-import yin.deng.refreshlibrary.refresh.api.RefreshLayout;
-import yin.deng.refreshlibrary.refresh.viewimpl.MyFooterView;
-import yin.deng.refreshlibrary.refresh.viewimpl.MyHeaderView;
 
 
 public abstract class SuperBaseApp extends Application {
@@ -45,7 +45,7 @@ public abstract class SuperBaseApp extends Application {
      */
     public static void initRefreshHeadAndFooter(){
         //设置全局的Header构建器
-        SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
                 @Override
                 public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
                     layout.setPrimaryColorsId(R.color.normal_bg, R.color.normal_4a);//全局设置主题颜色
@@ -54,7 +54,7 @@ public abstract class SuperBaseApp extends Application {
                 }
         });
         //设置全局的Footer构建器
-        SmartRefreshLayout.setDefaultRefreshFooterCreater(new DefaultRefreshFooterCreater() {
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
                 @Override
                 public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
                     //指定为经典Footer，默认是 BallPulseFooter
