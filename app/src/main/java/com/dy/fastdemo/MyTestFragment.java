@@ -10,6 +10,7 @@ import com.dy.fastframework.activity.BaseRecycleViewActivity;
 import com.dy.fastframework.fragment.BaseRecycleViewFragment;
 import com.dy.fastframework.picture.PictureSelectUtil;
 import com.dy.fastframework.presenter.BasePresenter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.ypx.imagepicker.bean.ImageItem;
 import com.ypx.imagepicker.data.OnImagePickCompleteListener;
 
@@ -23,7 +24,6 @@ import yin.deng.normalutils.utils.EventHolder;
 import yin.deng.normalutils.utils.ImageLoadUtil;
 import yin.deng.normalutils.utils.LogUtils;
 import yin.deng.normalutils.utils.NoDoubleClickListener;
-import yin.deng.refreshlibrary.refresh.SmartRefreshLayout;
 
 public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> {
     private SmartRefreshLayout smRf;
@@ -35,7 +35,7 @@ public class MyTestFragment extends BaseRecycleViewFragment<String,SplanshInfo> 
     }
 
     @Override
-    protected void init() {
+    public void init() {
         initVerticalRecycleView(rcView, smRf);
         initAdapter(R.layout.test_item, new BaseRecycleViewActivity.OnConvertDataLayoutListener<String>() {
             @Override
